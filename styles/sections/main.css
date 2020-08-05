@@ -1,0 +1,7 @@
+/* ВРЕМЕННО */
+.main{
+    height: calc(100vh - 107px - 82px);
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}

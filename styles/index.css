@@ -1,0 +1,20 @@
+@import url('./reset.css');
+@import url('./reset_custom.css');
+@import url('./sections/header.css');
+@import url('./sections/main.css');
+@import url('./sections/footer.css');
+
+.page{
+    font-family: 'Antic Slab', serif;
+}
+
+.btn{
+    background-color: rgb(228, 228, 230);
+    padding: .2em .5em;
+    border-radius: 10px;
+    text-transform: uppercase;
+    font-size: 1.5em;
+    color: rgb(95, 89, 89);
+    font-family: 'Antic Slab', serif;
+    text-shadow:  1px 1px 2px rgb(248, 151, 151), 0 0 1em rgba(195, 195, 204, 0.836), 0 0 0.2em rgb(137, 137, 161);
+}
