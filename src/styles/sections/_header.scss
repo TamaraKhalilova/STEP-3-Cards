@@ -11,3 +11,22 @@
     color: rgb(95, 89, 89);
     text-shadow:  1px 1px 2px rgb(248, 151, 151), 0 0 1em rgba(195, 195, 204, 0.836), 0 0 0.2em rgb(137, 137, 161);
 }
+
+.autorization{
+    padding: 1em;
+    text-align: center;
+    background-color: rgb(219, 214, 215);
+    flex-direction: column;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    display: none;
+    border-radius: 10px;
+
+    input{
+        margin: .5em 1em 2em 1em;
+        border: 1px solid grey;
+        display: block;
+    }
+}

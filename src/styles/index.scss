@@ -5,9 +5,8 @@
 @import "sections/sections";
 
 .page{
-    font-family: 'Antic Slab', serif;
+    font-family: 'Montserrat', serif;
     position: relative;
-    // filter: blur(5px);
 }
 
 .btn{
@@ -17,22 +16,13 @@
     text-transform: uppercase;
     font-size: 1.5em;
     color: rgb(95, 89, 89);
-    font-family: 'Antic Slab', serif;
+    font-family: inherit;
+    cursor: pointer;
     text-shadow:  1px 1px 2px rgb(248, 151, 151), 0 0 1em rgba(195, 195, 204, 0.836), 0 0 0.2em rgb(137, 137, 161);
+
+    &:hover{
+        background-color: rgb(243, 243, 247);
+    }
 }
 
-form{
-    width: 30vw;
-    // height: 30vh;
-    background-color: pink;
-    display: flex;
-    flex-direction: column;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    display: none;
-}
-input{
-    margin: 1em;
-}
+
