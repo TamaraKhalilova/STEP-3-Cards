@@ -11,23 +11,28 @@
 </head>
 <body>
     <div class="page">
-        <header class="header">
-            <a href="#void">
-                <img src="./img/logo.png" alt="logo">
-            </a>
-            <h1 class="header__name">The Hospital</h1>
-            <a href="#" class="btn">Вход</a>
-        </header>
-        <main class="main">
-            <p>No items selected</p>
-        </main>
-        <footer class="footer">
-            <span>Group: fem7, 2020</span>
-        </footer>
-    </div>
-    <div class="autorization">
-        <form action="post">
-            
+        <div class="page__wrapper">
+            <header class="header">
+                <a href="#void">
+                    <img src="./img/logo.png" alt="logo">
+                </a>
+                <h1 class="header__name">The Hospital</h1>
+                <a href="#" class="btn btn--header">Вход</a>
+            </header>
+            <main class="main">
+                <p>No items selected</p>
+            </main>
+            <footer class="footer">
+                <span>Group: fem7, 2020</span>
+            </footer>
+        </div>
+    
+        <form class='autorization' action="post">
+            <label for="email">Введите вашу почту:</label>
+            <input type="email" id="email">
+            <label for="password">Введите ваш пароль:</label>
+            <input type="password" id="password">
+            <button class="btn">Отправить</button>
         </form>
     </div>
 </body>
