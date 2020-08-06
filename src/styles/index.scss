@@ -1,8 +1,8 @@
-@import url('./reset.css');
-@import url('./reset_custom.css');
-@import url('./sections/header.css');
-@import url('./sections/main.css');
-@import url('./sections/footer.css');
+@import "../../node_modules/reset-css/sass/reset";
+@import "variables";
+@import "mixins";
+@import "reset";
+@import "sections/sections";
 
 .page{
     font-family: 'Antic Slab', serif;
