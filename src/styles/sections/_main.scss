@@ -3,5 +3,41 @@
     height: calc(100vh - 107px - 82px);
     display: flex;
     justify-content: space-evenly;
-    align-items: center;
+    align-items: top;
+}
+
+.visit-card-hide{
+    display: none;
+}
+.open-visit {
+    text-align: center;
+    font-style: oblique;
+    color: #FF4500;
+}
+.open-visit:hover{
+     cursor: pointer;
+ }
+ .btn-visit {
+    text-align:center;
+    font-size:13px;
+    text-decoration: none;
+    font-weight: 700;
+    padding: 3px 6px;
+    margin: 10px auto;
+    display: inline-block;
+    background: #eaeef1;    
+    background-image: linear-gradient(rgba(0,0,0,0), rgba(0,0,0,.1));
+    border-radius: 3px;
+    color: rgba(0,0,0,.6);
+    text-shadow: 0 1px 1px rgba(255,255,255,.7);
+    box-shadow: 0 0 0 1px rgba(0,0,0,.2), 0 1px 2px rgba(0,0,0,.2), inset 0 1px 2px rgba(255,255,255,.7);
+}
+
+.btn-visit :hover, .btn-visit.hover {
+    background: #fff;
+}
+.btn-visit:active, .btn-visit.active {
+    background: #d0d3d6;
+    background-image: linear-gradient(rgba(0,0,0,.1), rgba(0,0,0,0));
+    box-shadow: inset 0 0 2px rgba(0,0,0,.2), inset 0 2px 5px rgba(0,0,0,.2), 0 1px rgba(255,255,255,.2);
 }
