@@ -225,7 +225,7 @@ async function requestDeleteCard(cardId, card) {
 // changeCard() - удалить карточку - нужно модальное окно
 //  функция зарос:
 
-async function requestDeleteCard(cardId, body) {
+async function requestChangeCard(cardId, body) {
     await axios({
         method: 'PUT',
         url: `http://cards.danit.com.ua/cards/${cardId}`,
@@ -253,4 +253,7 @@ const alteredCardUser = {
     "urgency": "normal",
     "data": "10-10-20"      
 }
-requestDeleteCard(9724, alteredCardUser);
+// requestChangeCard(9724, alteredCardUser);
+
+
+
