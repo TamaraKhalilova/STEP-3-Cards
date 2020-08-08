@@ -1,0 +1,16 @@
+@mixin formDesign(){
+    padding: 1em;
+    text-align: center;
+    background-color: rgb(219, 214, 215);
+    border-radius: 10px;
+}
+@mixin inputsDesign(){
+    display: block;
+    text-align: center;
+    background-color: rgb(219, 214, 215);
+    border-radius: 10px;
+}
+@mixin flexColumned(){
+    flex-direction: column;
+    align-items: center;
+}

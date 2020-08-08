@@ -11,3 +11,64 @@
     color: rgb(95, 89, 89);
     text-shadow:  1px 1px 2px rgb(248, 151, 151), 0 0 1em rgba(195, 195, 204, 0.836), 0 0 0.2em rgb(137, 137, 161);
 }
+
+.modal{
+    display: none;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.message{
+    color: transparent;
+    margin: 1em 0;
+}
+
+.autorization{
+    display: none;
+    @include formDesign;
+
+    input{
+        margin: .3em 0.5em 2.5em 0.5em;
+        @include inputsDesign;
+        padding: 1em;   
+    }
+}
+
+.visit-creation{
+    display: none;
+    font-size: 0.8em;
+    @include formDesign;
+    @include flexColumned;
+
+    input, select, textarea{
+        margin: .3em 0 1em 0;
+        @include inputsDesign;   
+    }
+}
+
+.visit-inputs--general{
+    padding: 0.5em;
+    display: none;
+
+    @include flexColumned;
+}
+
+.visit-inputs{
+
+    &.cardiologist{
+        display: none;
+        @include flexColumned;
+
+        &.therapist{
+            display: none;
+        }
+    }
+
+    &.dentist{
+        display: none;
+        @include flexColumned;
+    }
+
+}
