@@ -9,8 +9,6 @@ class Visit {
         this.description = description
         this.urgency = urgency
     }
-
-
 }
 
 class VisitCardiologist extends Visit {
@@ -138,8 +136,8 @@ function addCardVisit (visit){
             newVisit = new VisitTherapists(visit);
             visitBoard.insertAdjacentHTML('beforeend', newVisit.render());
         break;
-        default:
-            throw new Error('not exists that doctor');
+        // default:
+        //     throw new Error('not exists that doctor');
     }
 }
 
