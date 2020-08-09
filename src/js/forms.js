@@ -2,6 +2,7 @@ const page = document.querySelector('.page');
 const pageWrapper = document.querySelector('.page__wrapper');
 const btnHeader = document.querySelector('.btn--header');
 let visitCreationForm;
+let message;
 let options;
 let basicOption;
 let token;
@@ -44,8 +45,6 @@ const visitCreationFormContent = `
 
                 <button class="btn btn--create">Создать</button>
 `;
-
-
 
 
 class Form {
@@ -126,6 +125,7 @@ const autorizationForm = document.querySelector('.autorization');
 createEl(['email', 'email', "Type your email..."], Input, 'afterend', document.querySelector('label[for="email"]'));
 createEl(['password', 'password', "Type your password..."], Input, 'afterend', document.querySelector('label[for="password"]'));
 
+if (localStorage.getItem('token')) btnHeader.textContent = 'Создать визит';
 
 
 //cобытия по нажатию кнопки в хедере
@@ -133,17 +133,22 @@ btnHeader.addEventListener('click', ()=>{
 
     modal.style.display = 'block';
     pageWrapper.style.filter = 'blur(5px)';
-
     if (btnHeader.textContent === 'Вход'){
+
         autorizationForm.style.display = 'block';
+        message = document.querySelector('.message');
+        message.style.color = 'transparent';
         modal.addEventListener('submit', getLogin);
     } else {
         autorizationForm.style.display = 'none';
-        if(document.querySelector('.visit-creation') !== null){
-            // basicOption = document.querySelectorAll(`option[value='placeholder']`);
-            // basicOption.forEach(e=>e.setAttribute('selected', true));
-            // visitCreationForm = document.querySelector('.visit-creation');
-            // Array.from(visitCreationForm.children).forEach(el => (el.tagName !== 'SELECT' && el.textContent !== 'x')? el.style.display = 'none' : null);
+        visitCreationForm = document.querySelector('.visit-creation');       
+        if(visitCreationForm){
+            visitCreationForm.style.display = 'flex';
+            basicOption = document.querySelectorAll(`option`);    
+            basicOption.forEach(el=>{
+                el.removeAttribute('selected');
+                if (el.getAttribute('value') === 'placeholder') el.setAttribute('selected', true);
+            });
             return;
         }
         createEl(visitCreationFormContent, Modal, 'beforeend', modal);
@@ -160,29 +165,28 @@ btnHeader.addEventListener('click', ()=>{
 
 })
 
-// событие: авторизация
+// событие кнопки в хедере: авторизация
 async function getLogin(e){
         e.preventDefault();
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
     
         const response = await axios.post('http://cards.danit.com.ua/login',{email, password});
-    
+        token = response.data.token;
+
         if (response.data.status === 'Success'){
             modal.style.display = 'none';
             pageWrapper.style.filter = '';
-            btnHeader.textContent = 'Создать визит'
+            btnHeader.textContent = 'Создать визит';
+            localStorage.setItem('token', token);
         } else {
-            const message = document.querySelector('.message');
+            // console.log('err');
             message.style.color = 'red';
         } 
-
-        token = response.data.token;
-        localStorage.setItem('ur token', token);
         return token
 }
 
-// событие: создание визита
+// событие кнопки в хедере: создание визита
 function visitCreate(e){
     if (e.target.getAttribute('name') !== 'doctors-selection') return;
 
@@ -241,30 +245,29 @@ function visitCreate(e){
 
         break;
     }
-
-
-        // (Array.from(e.target.children).find(el=>el.getAttribute('value') !== e.target.value)).setAttribute('selected', false);
 }
 
 
 // кнопка Х
 modal.addEventListener('click', (e)=>{
     if (!e.target.classList.contains('btn--close')) return;
-
-
-    // basicOption = document.querySelectorAll(`option[value='placeholder']`);
-    // basicOption.forEach(e=>e.setAttribute('selected', true));
-
-    // basicOption = document.querySelectorAll(`option`);    
-    // basicOption.forEach(el=>el.setAttribute('selected', false));
-    // basicOption.forEach(el=>(el.getAttribute('value') !== 'placeholder')? el.setAttribute('selected', false): el.setAttribute('selected', true));
-    document.querySelector('select[name="doctors-selection"]').setAttribute('value', 'placeholder');
-
+    e.preventDefault();
     visitCreationForm = document.querySelector('.visit-creation');
-    Array.from(visitCreationForm.children).forEach(el => (el.tagName !== 'SELECT' && el.textContent !== 'x')? el.style.display = 'none' : null);
+    e.target.parentElement.style.display = 'none';
+    modalClose();
+})
 
-    modal.style.display = 'none';
+//cобытие: нажатие области вокруг модального окна
+page.addEventListener('click', (event)=>{
+    if(!modal.contains(event.target) && event.target !== btnHeader) {
+        modal.style.display = 'none';
+        modalClose();
+    }
+})
+
+function modalClose(){
+    if(visitCreationForm) Array.from(visitCreationForm.children).forEach(el => (el.tagName !== 'SELECT' && el.textContent !== 'x')? el.style.display = 'none' : null);
     pageWrapper.style.filter = '';
     document.querySelectorAll('input').forEach(e=>e.value ='');
-
-})
+    document.querySelectorAll('textarea').forEach(e=>e.value ='');
+}
