@@ -2,6 +2,7 @@ const page = document.querySelector('.page');
 const pageWrapper = document.querySelector('.page__wrapper');
 const btnHeader = document.querySelector('.btn--header');
 let visitCreationForm;
+let message;
 let options;
 let basicOption;
 let token;
@@ -134,16 +135,21 @@ btnHeader.addEventListener('click', ()=>{
     modal.style.display = 'block';
     pageWrapper.style.filter = 'blur(5px)';
 
+
     if (btnHeader.textContent === 'Вход'){
+
         autorizationForm.style.display = 'block';
+        message = document.querySelector('.message');
+        message.style.color = 'transparent';
         modal.addEventListener('submit', getLogin);
     } else {
         autorizationForm.style.display = 'none';
-        if(document.querySelector('.visit-creation') !== null){
-            // basicOption = document.querySelectorAll(`option[value='placeholder']`);
-            // basicOption.forEach(e=>e.setAttribute('selected', true));
-            // visitCreationForm = document.querySelector('.visit-creation');
-            // Array.from(visitCreationForm.children).forEach(el => (el.tagName !== 'SELECT' && el.textContent !== 'x')? el.style.display = 'none' : null);
+        visitCreationForm = document.querySelector('.visit-creation');       
+        if(visitCreationForm !== null){
+            visitCreationForm.style.display = 'flex';
+            basicOption = document.querySelectorAll(`option`);    
+            basicOption.forEach(el=>el.removeAttribute('selected'));
+            basicOption[0].setAttribute('selected', true);
             return;
         }
         createEl(visitCreationFormContent, Modal, 'beforeend', modal);
@@ -173,7 +179,6 @@ async function getLogin(e){
             pageWrapper.style.filter = '';
             btnHeader.textContent = 'Создать визит'
         } else {
-            const message = document.querySelector('.message');
             message.style.color = 'red';
         } 
 
@@ -241,29 +246,16 @@ function visitCreate(e){
 
         break;
     }
-
-
-        // (Array.from(e.target.children).find(el=>el.getAttribute('value') !== e.target.value)).setAttribute('selected', false);
 }
 
 
 // кнопка Х
 modal.addEventListener('click', (e)=>{
     if (!e.target.classList.contains('btn--close')) return;
-
-
-    // basicOption = document.querySelectorAll(`option[value='placeholder']`);
-    // basicOption.forEach(e=>e.setAttribute('selected', true));
-
-    // basicOption = document.querySelectorAll(`option`);    
-    // basicOption.forEach(el=>el.setAttribute('selected', false));
-    // basicOption.forEach(el=>(el.getAttribute('value') !== 'placeholder')? el.setAttribute('selected', false): el.setAttribute('selected', true));
-    document.querySelector('select[name="doctors-selection"]').setAttribute('value', 'placeholder');
-
     visitCreationForm = document.querySelector('.visit-creation');
-    Array.from(visitCreationForm.children).forEach(el => (el.tagName !== 'SELECT' && el.textContent !== 'x')? el.style.display = 'none' : null);
+    if(visitCreationForm) Array.from(visitCreationForm.children).forEach(el => (el.tagName !== 'SELECT' && el.textContent !== 'x')? el.style.display = 'none' : null);
 
-    modal.style.display = 'none';
+    e.target.parentElement.style.display = 'none';
     pageWrapper.style.filter = '';
     document.querySelectorAll('input').forEach(e=>e.value ='');
 
