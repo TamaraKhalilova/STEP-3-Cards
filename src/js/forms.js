@@ -127,7 +127,10 @@ const autorizationForm = document.querySelector('.autorization');
 createEl(['email', 'email', "Type your email..."], Input, 'afterend', document.querySelector('label[for="email"]'));
 createEl(['password', 'password', "Type your password..."], Input, 'afterend', document.querySelector('label[for="password"]'));
 
-
+document.addEventListener('DOMContentLoaded', () => {
+    (localStorage.getItem('token')) ? btnHeader.textContent = 'Создать визит' : false;
+    // console.log(localStorage.getItem('token'));
+    // console.log('ghbd');
 
 //cобытия по нажатию кнопки в хедере
 btnHeader.addEventListener('click', ()=>{
@@ -173,17 +176,16 @@ async function getLogin(e){
         const password = document.getElementById('password').value;
     
         const response = await axios.post('http://cards.danit.com.ua/login',{email, password});
-    
+        token = response.data.token;
+        
         if (response.data.status === 'Success'){
             modal.style.display = 'none';
             pageWrapper.style.filter = '';
-            btnHeader.textContent = 'Создать визит'
+            btnHeader.textContent = 'Создать визит';
+            localStorage.setItem('token', token);
         } else {
             message.style.color = 'red';
         } 
-
-        token = response.data.token;
-        localStorage.setItem('ur token', token);
         return token
 }
 
@@ -260,3 +262,5 @@ modal.addEventListener('click', (e)=>{
     document.querySelectorAll('input').forEach(e=>e.value ='');
 
 })
+
+});
