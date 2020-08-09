@@ -1,66 +1,45 @@
 const page = document.querySelector('.page');
 const pageWrapper = document.querySelector('.page__wrapper');
 const btnHeader = document.querySelector('.btn--header');
-const select = document.querySelector('.doctors-selection');
+let visitCreationForm;
+let options;
+let basicOption;
 let token;
 
 const modalContent = `<form action="post" class='modal'></form>`;
 const autorizationContent = `
     <div class="autorization">
         <label for="email" class="accented">Введите вашу почту:</label>
-        <input type="email" id="email" placeholder="Type your email..." required>
         <label for="password" class="accented">Введите ваш пароль:</label>
-        <input type="password" id="password" placeholder="Type your password..." required>
         <button class="btn">Отправить</button>
+        <button class="btn btn--close">x</button>
         <p class="message">Ошибка авторизации</p>
     </div>
 `;
 const visitCreationFormContent = `
             <div class="visit-creation">
-                <select name="doctors-selection">
-                    <option value="placeholder">Выберите врача..</option> 
-                    <option value="cardiologist">Кардиолог</option> 
-                    <option value="dentist">Стоматолог</option>
-                    <option value="therapist">Терапевт</option>
-                </select>
-
+                <button class="btn btn--close">x</button>
                 <div class="visit-inputs--general">
                     <label for="visit-purpose" class="accented">Цель визита:</label>
-                    <input type="text" id="visit-purpose">
 
                     <label for="visit-desc" class="accented">Краткое описание визита:</label>
-                    <textarea id="visit-desc" cols="30"></textarea>
-
-                    <select name="visit-urgency">
-                        <option value="placeholder">Срочность</option> 
-                        <option value="normal">обычная</option> 
-                        <option value="priority">приоритетная</option> 
-                        <option value="urgent">неотложная</option>
-                    </select>
 
                     <label for="visit-details" class="accented">ФИО:</label>
-                    <input type="text" id="visit-details">
                 </div>
 
                 <div class="visit-inputs cardiologist"> 
                     <label for="visit-pressure" class="accented">Oбычное давление:</label>
-                    <input type="text" id="visit-pressure">
-
                     <label for="visit-weight" class="accented">Индекс массы тела:</label>
-                    <input type="text" id="visit-weight">
+                    <label for="visit-diseases" class="accented">Перенесенные заболевания <br> сердечно-сосудистой системы:</label>
 
-                    <label for="visit-diseases" class="accented">Перенесенные заболевания сердечно-сосудистой системы:</label>
-                    <input type="text" id="visit-diseases">
                 </div>
 
                 <div class="visit-inputs dentist"> 
                     <label for="visit-date" class="accented">Дата последнего посещения:</label>
-                    <input type="date" id="visit-date">
                 </div>
 
                 <div class="visit-inputs cardiologist therapist"> 
                     <label for="visit-age" class="accented">Возраст:</label>
-                    <input type="number" id="visit-age">
                 </div>
 
                 <button class="btn btn--create">Создать</button>
@@ -83,102 +62,75 @@ class Modal {
     render(){ return this.modalDiv }
 }
 
-function createEl(content, Func, tag){
-    const element = new Func(content).render();
-    tag.insertAdjacentHTML('beforeend', element);
+class Input {
+    constructor(type, id, placeholder){
+        this.type = type;
+        this.id = id;
+
+        if(placeholder) this.placeholder = placeholder;
+    }
+
+    composeTag(){
+        if(this.placeholder){
+            return `<input type='${this.type}' id='${this.id}' placeholder='${this.placeholder}' required'>`
+        } else {
+            return `<input type='${this.type}' id='${this.id}' required'>`
+        }
+        
+    }
+
+    render(){ return this.composeTag() }
 }
 
-createEl(modalContent, Form, page);
+class Select {
+    constructor(name, options){
+        this.name = name;
+        this.options = options;
+    }
+
+    composeTag(){
+        return `<select name="${this.name}">
+                    ${this.options}
+                </select>`
+    }
+
+    render(){ return this.composeTag() }
+}
+
+class Textarea {
+    constructor(id, cols){
+        this.id = id;
+        this.cols = cols;
+    }
+
+    composeTag(){ return `<textarea id="${this.id}" cols="${this.cols}"></textarea>` }
+
+    render(){ return this.composeTag() }
+}
+
+
+
+function createEl(content, Func, place, tag){
+    let element;
+    (typeof content === 'object') ? element = new Func(...content).render() : element = new Func(content).render();
+    tag.insertAdjacentHTML(place, element);
+}
+
+createEl(modalContent, Form, 'beforeend', page);
 const modal = document.querySelector('.modal');
 
-createEl(autorizationContent, Modal, modal);
+createEl(autorizationContent, Modal, 'beforeend', modal);
 const autorizationForm = document.querySelector('.autorization');
 
-createEl(visitCreationFormContent, Modal, modal);
-const visitCreationForm = document.querySelector('.visit-creation');
 
-//создание общей формы в разметке
-// const modalContent = `<form action="post" class='modal'></form>`;
-// let modal = new Form(modalContent).render();
-// page.insertAdjacentHTML('beforeend', modal);
-
-
-
-//создание модального окна авторизации в разметке
-// const autorizationContent = `
-//     <div class="autorization">
-//         <label for="email" class="accented">Введите вашу почту:</label>
-//         <input type="email" id="email" placeholder="Type your email..." required>
-//         <label for="password" class="accented">Введите ваш пароль:</label>
-//         <input type="password" id="password" placeholder="Type your password..." required>
-//         <button class="btn">Отправить</button>
-//         <p class="message">Ошибка авторизации</p>
-//     </div>
-// `;
-// let autorization = new Modal(autorizationContent).render();
-// modal.insertAdjacentHTML('beforeend', autorization);
-
-
-
-//создание модалного окна создания карточки в разметке
-// const visitCreationFormContent = `
-//             <div class="visit-creation">
-//                 <select name="doctors-selection">
-//                     <option value="placeholder">Выберите врача..</option> 
-//                     <option value="cardiologist">Кардиолог</option> 
-//                     <option value="dentist">Стоматолог</option>
-//                     <option value="therapist">Терапевт</option>
-//                 </select>
-
-//                 <div class="visit-inputs--general">
-//                     <label for="visit-purpose" class="accented">Цель визита:</label>
-//                     <input type="text" id="visit-purpose">
-
-//                     <label for="visit-desc" class="accented">Краткое описание визита:</label>
-//                     <textarea id="visit-desc" cols="30"></textarea>
-
-//                     <select name="visit-urgency">
-//                         <option value="placeholder">Срочность</option> 
-//                         <option value="normal">обычная</option> 
-//                         <option value="priority">приоритетная</option> 
-//                         <option value="urgent">неотложная</option>
-//                     </select>
-
-//                     <label for="visit-details" class="accented">ФИО:</label>
-//                     <input type="text" id="visit-details">
-//                 </div>
-
-//                 <div class="visit-inputs cardiologist"> 
-//                     <label for="visit-pressure" class="accented">Oбычное давление:</label>
-//                     <input type="text" id="visit-pressure">
-
-//                     <label for="visit-weight" class="accented">Индекс массы тела:</label>
-//                     <input type="text" id="visit-weight">
-
-//                     <label for="visit-diseases" class="accented">Перенесенные заболевания сердечно-сосудистой системы:</label>
-//                     <input type="text" id="visit-diseases">
-//                 </div>
-
-//                 <div class="visit-inputs dentist"> 
-//                     <label for="visit-date" class="accented">Дата последнего посещения:</label>
-//                     <input type="date" id="visit-date">
-//                 </div>
-
-//                 <div class="visit-inputs cardiologist therapist"> 
-//                     <label for="visit-age" class="accented">Возраст:</label>
-//                     <input type="number" id="visit-age">
-//                 </div>
-
-//                 <button class="btn btn--create">Создать</button>
-// `;
-// let visitCreationForm = new Modal(visitCreationFormContent).render();
-// modal.insertAdjacentHTML('beforeend', visitCreationForm);
-
+createEl(['email', 'email', "Type your email..."], Input, 'afterend', document.querySelector('label[for="email"]'));
+createEl(['password', 'password', "Type your password..."], Input, 'afterend', document.querySelector('label[for="password"]'));
 
 
 
 //cобытия по нажатию кнопки в хедере
 btnHeader.addEventListener('click', ()=>{
+
     modal.style.display = 'block';
     pageWrapper.style.filter = 'blur(5px)';
 
@@ -187,8 +139,23 @@ btnHeader.addEventListener('click', ()=>{
         modal.addEventListener('submit', getLogin);
     } else {
         autorizationForm.style.display = 'none';
-        visitCreationForm.style.display = 'flex';
-        modal.addEventListener('change', visitCreate)
+        if(document.querySelector('.visit-creation') !== null){
+            // basicOption = document.querySelectorAll(`option[value='placeholder']`);
+            // basicOption.forEach(e=>e.setAttribute('selected', true));
+            // visitCreationForm = document.querySelector('.visit-creation');
+            // Array.from(visitCreationForm.children).forEach(el => (el.tagName !== 'SELECT' && el.textContent !== 'x')? el.style.display = 'none' : null);
+            return;
+        }
+        createEl(visitCreationFormContent, Modal, 'beforeend', modal);
+        visitCreationForm = document.querySelector('.visit-creation');        
+        options = `<option value="placeholder" value =1>Выберите врача..</option> 
+        <option value="cardiologist">Кардиолог</option> 
+        <option value="dentist">Стоматолог</option>
+        <option value="therapist">Терапевт</option>`
+
+        createEl(["doctors-selection", options], Select, 'afterbegin', visitCreationForm);
+
+        modal.addEventListener('change', visitCreate);
     }
 
 })
@@ -211,36 +178,93 @@ async function getLogin(e){
         } 
 
         token = response.data.token;
+        localStorage.setItem('ur token', token);
         return token
 }
 
 // событие: создание визита
 function visitCreate(e){
+    if (e.target.getAttribute('name') !== 'doctors-selection') return;
 
     const visitInputsGeneral = document.querySelector('.visit-inputs--general');
     const visitInputsCollection = document.querySelectorAll('.visit-inputs');
     const btnCreate = document.querySelector('.btn--create');
     btnCreate.style.display = 'block';
-    visitInputsGeneral.style.display = 'flex';
+
+    if(visitInputsGeneral.style.display !== 'flex') {
+        visitInputsGeneral.style.display = 'flex';
+
+            if(visitInputsGeneral.children.length < 7) {
+                createEl(['text', 'visit-purpose'], Input, 'afterend', document.querySelector('label[for="visit-purpose"]'));
+                createEl(['visit-desc', '30'], Textarea, 'afterend', document.querySelector('label[for="visit-desc"]'));
+    
+                options = `<option value="placeholder" selected>Срочность</option> 
+                    <option value="normal">обычная</option> 
+                    <option value="priority">приоритетная</option> 
+                    <option value="urgent">неотложная</option>`
+    
+                createEl(["visit-urgency", options], Select, 'afterend', document.querySelector('textarea[id="visit-desc"]'));
+                createEl(['text', 'visit-details'], Input, 'afterend', document.querySelector('label[for="visit-details"]')); 
+            }
+    }
 
     switch (e.target.value) {
         case 'placeholder':
             Array.from(visitCreationForm.children).forEach(el => (el.tagName !== 'SELECT')? el.style.display = 'none': null);
         break;
         case 'cardiologist':
-            visitInputsCollection.forEach(el => el.classList.contains('cardiologist') ? el.style.display = 'flex' : el.style.display = 'none');
+            visitInputsCollection.forEach(el =>el.classList.contains('cardiologist') ? el.style.display = 'flex' : el.style.display = 'none'); 
+        
+            const cardiologistInputs = document.querySelector('.visit-inputs.cardiologist');
+
+            if(cardiologistInputs.children.length < 4) {
+                createEl(['text', 'visit-pressure'], Input, 'afterend', document.querySelector('label[for="visit-pressure"]'));
+                createEl(['text', 'visit-weight'], Input, 'afterend', document.querySelector('label[for="visit-weight"]'));
+                createEl(['text', 'visit-diseases'], Input, 'afterend', document.querySelector('label[for="visit-diseases"]'));
+                createEl(['number', 'visit-age'], Input, 'afterend', document.querySelector('label[for="visit-age"]')); 
+            }
         break;
         case 'dentist':
-            visitInputsCollection.forEach(el => el.classList.contains('dentist') ? el.style.display = 'flex' : el.style.display = 'none')
+            visitInputsCollection.forEach(el => el.classList.contains('dentist') ? el.style.display = 'flex' : el.style.display = 'none');
+            const cardiologistDentist = document.querySelector('.visit-inputs.dentist');
+
+            if(cardiologistDentist.children.length < 2) createEl(['text', 'visit-date'], Input, 'afterend', document.querySelector('label[for="visit-date"]'));
         break;
         case 'therapist':
             visitInputsCollection.forEach(el => {
                 if(el.classList.contains('cardiologist') && el.classList.contains('therapist')){
-                     el.style.display = 'block' 
+                     el.style.display = 'block';
                 } else {
                     el.style.display = 'none'
                 }
-            } )
+            } );
+
         break;
     }
+
+
+        // (Array.from(e.target.children).find(el=>el.getAttribute('value') !== e.target.value)).setAttribute('selected', false);
 }
+
+
+// кнопка Х
+modal.addEventListener('click', (e)=>{
+    if (!e.target.classList.contains('btn--close')) return;
+
+
+    // basicOption = document.querySelectorAll(`option[value='placeholder']`);
+    // basicOption.forEach(e=>e.setAttribute('selected', true));
+
+    // basicOption = document.querySelectorAll(`option`);    
+    // basicOption.forEach(el=>el.setAttribute('selected', false));
+    // basicOption.forEach(el=>(el.getAttribute('value') !== 'placeholder')? el.setAttribute('selected', false): el.setAttribute('selected', true));
+    document.querySelector('select[name="doctors-selection"]').setAttribute('value', 'placeholder');
+
+    visitCreationForm = document.querySelector('.visit-creation');
+    Array.from(visitCreationForm.children).forEach(el => (el.tagName !== 'SELECT' && el.textContent !== 'x')? el.style.display = 'none' : null);
+
+    modal.style.display = 'none';
+    pageWrapper.style.filter = '';
+    document.querySelectorAll('input').forEach(e=>e.value ='');
+
+})

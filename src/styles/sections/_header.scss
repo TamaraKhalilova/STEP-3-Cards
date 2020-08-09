@@ -27,6 +27,7 @@
 
 .autorization{
     display: none;
+    position: relative;
     @include formDesign;
 
     input{
@@ -37,7 +38,8 @@
 }
 
 .visit-creation{
-    display: none;
+    display: flex;
+    position: relative;
     font-size: 0.8em;
     @include formDesign;
     @include flexColumned;
