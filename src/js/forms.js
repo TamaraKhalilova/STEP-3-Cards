@@ -47,8 +47,6 @@ const visitCreationFormContent = `
 `;
 
 
-
-
 class Form {
     constructor(formTag){
         this.formTag = formTag;
@@ -127,18 +125,14 @@ const autorizationForm = document.querySelector('.autorization');
 createEl(['email', 'email', "Type your email..."], Input, 'afterend', document.querySelector('label[for="email"]'));
 createEl(['password', 'password', "Type your password..."], Input, 'afterend', document.querySelector('label[for="password"]'));
 
-document.addEventListener('DOMContentLoaded', () => {
-    (localStorage.getItem('token')) ? btnHeader.textContent = 'Создать визит' : false;
-    // console.log(localStorage.getItem('token'));
-    // console.log('ghbd');
+if (localStorage.getItem('token')) btnHeader.textContent = 'Создать визит';
+
 
 //cобытия по нажатию кнопки в хедере
 btnHeader.addEventListener('click', ()=>{
 
     modal.style.display = 'block';
     pageWrapper.style.filter = 'blur(5px)';
-
-
     if (btnHeader.textContent === 'Вход'){
 
         autorizationForm.style.display = 'block';
@@ -148,11 +142,13 @@ btnHeader.addEventListener('click', ()=>{
     } else {
         autorizationForm.style.display = 'none';
         visitCreationForm = document.querySelector('.visit-creation');       
-        if(visitCreationForm !== null){
+        if(visitCreationForm){
             visitCreationForm.style.display = 'flex';
             basicOption = document.querySelectorAll(`option`);    
-            basicOption.forEach(el=>el.removeAttribute('selected'));
-            basicOption[0].setAttribute('selected', true);
+            basicOption.forEach(el=>{
+                el.removeAttribute('selected');
+                if (el.getAttribute('value') === 'placeholder') el.setAttribute('selected', true);
+            });
             return;
         }
         createEl(visitCreationFormContent, Modal, 'beforeend', modal);
@@ -169,7 +165,7 @@ btnHeader.addEventListener('click', ()=>{
 
 })
 
-// событие: авторизация
+// событие кнопки в хедере: авторизация
 async function getLogin(e){
         e.preventDefault();
         const email = document.getElementById('email').value;
@@ -177,19 +173,20 @@ async function getLogin(e){
     
         const response = await axios.post('http://cards.danit.com.ua/login',{email, password});
         token = response.data.token;
-        
+
         if (response.data.status === 'Success'){
             modal.style.display = 'none';
             pageWrapper.style.filter = '';
             btnHeader.textContent = 'Создать визит';
             localStorage.setItem('token', token);
         } else {
+            // console.log('err');
             message.style.color = 'red';
         } 
         return token
 }
 
-// событие: создание визита
+// событие кнопки в хедере: создание визита
 function visitCreate(e){
     if (e.target.getAttribute('name') !== 'doctors-selection') return;
 
@@ -254,13 +251,23 @@ function visitCreate(e){
 // кнопка Х
 modal.addEventListener('click', (e)=>{
     if (!e.target.classList.contains('btn--close')) return;
+    e.preventDefault();
     visitCreationForm = document.querySelector('.visit-creation');
-    if(visitCreationForm) Array.from(visitCreationForm.children).forEach(el => (el.tagName !== 'SELECT' && el.textContent !== 'x')? el.style.display = 'none' : null);
-
     e.target.parentElement.style.display = 'none';
-    pageWrapper.style.filter = '';
-    document.querySelectorAll('input').forEach(e=>e.value ='');
-
+    modalClose();
 })
 
-});
+//cобытие: нажатие области вокруг модального окна
+page.addEventListener('click', (event)=>{
+    if(!modal.contains(event.target) && event.target !== btnHeader) {
+        modal.style.display = 'none';
+        modalClose();
+    }
+})
+
+function modalClose(){
+    if(visitCreationForm) Array.from(visitCreationForm.children).forEach(el => (el.tagName !== 'SELECT' && el.textContent !== 'x')? el.style.display = 'none' : null);
+    pageWrapper.style.filter = '';
+    document.querySelectorAll('input').forEach(e=>e.value ='');
+    document.querySelectorAll('textarea').forEach(e=>e.value ='');
+}
