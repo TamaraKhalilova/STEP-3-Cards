@@ -1,3 +1,5 @@
+// необходимые импорты из forms.js: modal, visitCreationForm, createVisitCreationForm, visitInputsCollection
+
 class Visit {
     constructor({id, title, doctor, fio, description, urgency}){
         this.id = id
@@ -221,6 +223,22 @@ function deleteCard(arrayVisits){
         });
     });
 }
+
+// tamara: editCard() - редактировать карточку
+// const visitBoard = document.querySelector('.visit-board');
+// visitBoard.addEventListener('click', (event)=>{
+//     if(!event.target.classList.contains('btn-change')) return;
+
+//     modal.style.display = 'block';
+//     if (!visitCreationForm) createVisitCreationForm();
+//     visitCreationForm = document.querySelector('.visit-creation');
+//     visitCreationForm.style.display = 'flex';
+//     const visitInputsCollection = document.querySelectorAll('.visit-inputs');
+//     // appearVisitInputs();
+            
+
+// });
+
 async function requestDeleteCard(cardId, card) {
     await axios({
         method: 'DELETE',
