@@ -154,19 +154,25 @@ btnHeader.addEventListener('click', ()=>{
             });
             return;
         }
-        createEl(visitCreationFormContent, Modal, 'beforeend', modal);
-        visitCreationForm = document.querySelector('.visit-creation');        
-        options = `<option value="placeholder" value =1>Выберите врача..</option> 
-        <option value="cardiologist">Кардиолог</option> 
-        <option value="dentist">Стоматолог</option>
-        <option value="therapist">Терапевт</option>`
-
-        createEl(["doctors-selection", options], Select, 'afterbegin', visitCreationForm);
-
-        modal.addEventListener('change', visitCreate);
+        // if(btnHeader.textContent !== 'Вход' || document.querySelector('.visit-card')){
+            createVisitCreationForm();
+            // createEl(visitCreationFormContent, Modal, 'beforeend', modal);
+            visitCreationForm = document.querySelector('.visit-creation');        
+            options = `<option value="placeholder" value =1>Выберите врача..</option> 
+            <option value="cardiologist">Кардиолог</option> 
+            <option value="dentist">Стоматолог</option>
+            <option value="therapist">Терапевт</option>`
+    
+            createEl(["doctors-selection", options], Select, 'afterbegin', visitCreationForm);
+    
+            modal.addEventListener('change', visitCreate);
+        // }
     }
-
 })
+
+function createVisitCreationForm(){
+    createEl(visitCreationFormContent, Modal, 'beforeend', modal);
+}
 
 // событие кнопки в хедере: авторизация
 async function getLogin(e){
@@ -184,13 +190,13 @@ async function getLogin(e){
             localStorage.setItem('token', token);
             loadCards(); // (Миронец) - грузим карточки
         } else {
-            // console.log('err');
             message.style.color = 'red';
         } 
         return token
 }
 
 // событие кнопки в хедере: создание визита
+
 function visitCreate(e){
     if (e.target.getAttribute('name') !== 'doctors-selection') return;
 
@@ -215,19 +221,16 @@ function visitCreate(e){
                 createEl(['text', 'visit-details'], Input, 'afterend', document.querySelector('label[for="visit-details"]')); 
             }
             // (Миронец) - добавляю событие по нажатию на СОЗДАТь--------------
-btnCreate.addEventListener('click',(ev)=>{
-    ev.preventDefault();
-    
-    addCard(getCardFromForm());
-    modal.style.display = 'none';  
-    pageWrapper.style.filter = '';
-
-        
-})
+            btnCreate.addEventListener('click',(ev)=>{
+                ev.preventDefault();
+                
+                addCard(getCardFromForm());
+                modal.style.display = 'none';  
+                pageWrapper.style.filter = '';    
+            })
 
 // ---------------------------------
     }
-
     switch (e.target.value) {
         case 'placeholder':
             Array.from(visitCreationForm.children).forEach(el => (el.tagName !== 'SELECT')? el.style.display = 'none': null);
@@ -241,7 +244,7 @@ btnCreate.addEventListener('click',(ev)=>{
                 createEl(['text', 'visit-pressure'], Input, 'afterend', document.querySelector('label[for="visit-pressure"]'));
                 createEl(['text', 'visit-weight'], Input, 'afterend', document.querySelector('label[for="visit-weight"]'));
                 createEl(['text', 'visit-diseases'], Input, 'afterend', document.querySelector('label[for="visit-diseases"]'));
-                createEl(['number', 'visit-age'], Input, 'afterend', document.querySelector('label[for="visit-age"]')); 
+                createCardioDentistInput(); 
             }
         break;
         case 'dentist':
@@ -254,6 +257,7 @@ btnCreate.addEventListener('click',(ev)=>{
             visitInputsCollection.forEach(el => {
                 if(el.classList.contains('cardiologist') && el.classList.contains('therapist')){
                      el.style.display = 'block';
+                     createCardioDentistInput();
                 } else {
                     el.style.display = 'none'
                 }
@@ -261,6 +265,11 @@ btnCreate.addEventListener('click',(ev)=>{
 
         break;
     }
+}
+
+//проверка на существование поля Возраст у кардиолога и терапевта + его создание
+function createCardioDentistInput(){
+    if(!document.querySelector('#visit-age')){createEl(['number', 'visit-age'], Input, 'afterend', document.querySelector('label[for="visit-age"]')); }
 }
 
 
@@ -275,7 +284,9 @@ modal.addEventListener('click', (e)=>{
 
 //cобытие: нажатие области вокруг модального окна
 page.addEventListener('click', (event)=>{
-    if(!modal.contains(event.target) && event.target !== btnHeader) {
+    if(!modal.contains(event.target) 
+        && event.target !== btnHeader
+        && !event.target.classList.contains('btn-change')) {
         modal.style.display = 'none';
         modalClose();
     }
