@@ -1,5 +1,3 @@
-// import { Visit, VisitCardiologist, VisitDantist, VisitTherapists } from './components/index.js';
-
 class Visit {
     constructor({id, title, doctor, fio, description, urgency}){
         this.id = id
@@ -9,6 +7,8 @@ class Visit {
         this.description = description
         this.urgency = urgency
     }
+
+
 }
 
 class VisitCardiologist extends Visit {
@@ -24,8 +24,8 @@ class VisitCardiologist extends Visit {
         return `<div class="visit-card" data-id="${this.id}">
                     <p>Пациент: ${this.fio}</p>
                     <p>Доктор: ${this.doctor}</p>
-                    <p class="open-visit">Скрыть</p>
-                    <div>
+                    <p class="open-visit">Показать</p>
+                    <div class = "visit-card-hide">
                         <p>Цель визита: ${this.title}</p>
                         <p>Описание визита: ${this.description}</p>
                         <p>Срочность: ${this.urgency}</p>
@@ -53,8 +53,8 @@ class VisitDentist extends Visit {
         return `<div class="visit-card" data-id="${this.id}">
                     <p>Пациент: ${this.fio}</p>
                     <p>Доктор: ${this.doctor}</p>
-                    <p class="open-visit">Скрыть</p>
-                    <div>
+                    <p class="open-visit">Показать</p>
+                    <div class = "visit-card-hide">
                         <p>Цель визита: ${this.title}</p>
                         <p>Описание визита: ${this.description}</p>
                         <p>Срочность: ${this.urgency}</p>
@@ -78,8 +78,8 @@ class VisitTherapists extends Visit {
         return `<div class="visit-card" data-id="${this.id}">
                     <p>Пациент: ${this.fio}</p>
                     <p>Доктор: ${this.doctor}</p>
-                    <p class="open-visit">Скрыть</p>
-                    <div>
+                    <p class="open-visit">Показать</p>
+                    <div class = "visit-card-hide">
                         <p>Цель визита: ${this.title}</p>
                         <p>Описание визита: ${this.description}</p>
                         <p>Срочность: ${this.urgency}</p>
@@ -93,30 +93,50 @@ class VisitTherapists extends Visit {
     }
 }
 
+//добавление визита
 
+function getCardFromForm(){
+    const formVisit = document.querySelector('.modal')
+    const newCard = {};
+    newCard.doctor = document.querySelector('[name="doctors-selection"]').value;
+    newCard.title = document.querySelector('#visit-purpose').value;
+    newCard.description = document.querySelector('#visit-desc').value;
+    newCard.urgency = document.querySelector('[name="visit-urgency"]').value;
+    newCard.fio = document.querySelector('#visit-details').value;
+        switch (newCard.doctor){
+            case 'cardiologist':
+                newCard.normalpreasure = document.querySelector('#visit-pressure').value;
+                newCard.massindex = document.querySelector('#visit-weight').value;
+                newCard.diseases = document.querySelector('#visit-diseases').value;
+                newCard.age = document.querySelector('#visit-age').value;
+            break;
+            case 'dentist':
+                newCard.data = document.querySelector('#visit-date').value;
+            break;
+            case 'therapist':
+                newCard.age = document.querySelector('#visit-age').value;
+            break;
+        };
+    return newCard
+}
 
-//этот кусок что бы тупо добавить карточки на сервер ---------------
 async function addCard(body) {
     await axios({    
             method: 'post', 
             url: 'https://cards.danit.com.ua/cards',    
-            headers: { Authorization: "Bearer f770b22f3318"},
+            headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
             data: body
         })
-        .then(response => console.log(response))
+        .then(response => {
+            addCardVisit(response.data)
+        })
         .catch(error => console.log(error));
+
+        addMessage(document.querySelectorAll('.visit-card').length, document.querySelector('.visit-board' ));
+        showHideVisit(document.querySelectorAll('.open-visit'));
+        deleteCard(document.querySelectorAll('.btn-delete'))  
 }
 
-const cardUser = {
-    "title": "Визит к дантисту",    
-    "description": 'Плановый визит',
-    "doctor": "Dentist",
-    "fio": "Петров Перт Петрович",
-    "urgency": "normal",
-    "data": "завтра"      
-}
-// addCard(cardUser);
-//----------------------------------------------------------------------------
 
 
 
@@ -124,20 +144,18 @@ function addCardVisit (visit){
     const visitBoard = document.querySelector('.visit-board');
     let newVisit
     switch (visit.doctor){
-        case 'Dentist':
+        case 'dentist':
             newVisit = new VisitDentist(visit);
             visitBoard.insertAdjacentHTML('beforeend', newVisit.render());
         break;
-        case 'Cardiologist':
+        case 'cardiologist':
             newVisit = new VisitCardiologist(visit);
             visitBoard.insertAdjacentHTML('beforeend', newVisit.render());
         break;
-        case 'Therapists':
+        case 'therapist':
             newVisit = new VisitTherapists(visit);
             visitBoard.insertAdjacentHTML('beforeend', newVisit.render());
-        break;
-        // default:
-        //     throw new Error('not exists that doctor');
+        break;      
     }
 }
 
@@ -146,7 +164,7 @@ async function loadCards(){
     await axios.get(
         'https://cards.danit.com.ua/cards',
         {
-            headers: { "Authorization" : "Bearer f770b22f3318" } 
+            headers: { "Authorization" : `Bearer ${localStorage.getItem('token')}` } 
         })
         .then(response => response.data.forEach(visit => addCardVisit(visit)));
 
@@ -157,7 +175,7 @@ async function loadCards(){
 }
     
 
-loadCards()
+
 
 
 
@@ -207,11 +225,12 @@ async function requestDeleteCard(cardId, card) {
     await axios({
         method: 'DELETE',
         url: `http://cards.danit.com.ua/cards/${cardId}`,
-        headers: { Authorization: "Bearer f770b22f3318"}
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
     })
     .then(response => {
         if (response.data.status === "Success"){
             card.remove();
+            addMessage(document.querySelectorAll('.visit-card').length, document.querySelector('.visit-board' ));
         }       
         else {
             throw new Error('не удалось удалить карточку')
@@ -220,14 +239,14 @@ async function requestDeleteCard(cardId, card) {
     .catch(error => console.log(error));
 }
 
-// changeCard() - удалить карточку - нужно модальное окно
+// changeCard() - изменить карточку - нужно модальное окно
 //  функция зарос:
 
 async function requestChangeCard(cardId, body) {
     await axios({
         method: 'PUT',
         url: `http://cards.danit.com.ua/cards/${cardId}`,
-        headers: { Authorization: "Bearer f770b22f3318"},
+        headers: { Authorization: `Bearer ${token}` },
         data: body
     })
     .then(response => {
@@ -235,7 +254,7 @@ async function requestChangeCard(cardId, body) {
             console.log('получилось!')
         }       
         else {
-            throw new Error('не удалось удалить карточку')
+            throw new Error('не удалось изменить карточку')
         }
     })
     .catch(error => console.log(error));
@@ -246,7 +265,7 @@ async function requestChangeCard(cardId, body) {
 const alteredCardUser = {
     "title": "Визит к терапевту",    
     "description": 'Плановый визит',
-    "doctor": "Therapists",
+    "doctor": "therapists",
     "fio": "Николаев Николай Николаевич",
     "urgency": "normal",
     "data": "10-10-20"      

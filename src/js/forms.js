@@ -125,7 +125,10 @@ const autorizationForm = document.querySelector('.autorization');
 createEl(['email', 'email', "Type your email..."], Input, 'afterend', document.querySelector('label[for="email"]'));
 createEl(['password', 'password', "Type your password..."], Input, 'afterend', document.querySelector('label[for="password"]'));
 
-if (localStorage.getItem('token')) btnHeader.textContent = 'Создать визит';
+if (localStorage.getItem('token')) {
+    btnHeader.textContent = 'Создать визит'
+    loadCards();// (Миронец) - грузим карточки
+};
 
 
 //cобытия по нажатию кнопки в хедере
@@ -179,6 +182,7 @@ async function getLogin(e){
             pageWrapper.style.filter = '';
             btnHeader.textContent = 'Создать визит';
             localStorage.setItem('token', token);
+            loadCards(); // (Миронец) - грузим карточки
         } else {
             // console.log('err');
             message.style.color = 'red';
@@ -210,6 +214,18 @@ function visitCreate(e){
                 createEl(["visit-urgency", options], Select, 'afterend', document.querySelector('textarea[id="visit-desc"]'));
                 createEl(['text', 'visit-details'], Input, 'afterend', document.querySelector('label[for="visit-details"]')); 
             }
+            // (Миронец) - добавляю событие по нажатию на СОЗДАТь--------------
+btnCreate.addEventListener('click',(ev)=>{
+    ev.preventDefault();
+    
+    addCard(getCardFromForm());
+    modal.style.display = 'none';  
+    pageWrapper.style.filter = '';
+
+        
+})
+
+// ---------------------------------
     }
 
     switch (e.target.value) {
