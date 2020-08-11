@@ -154,19 +154,17 @@ btnHeader.addEventListener('click', ()=>{
             });
             return;
         }
-        // if(btnHeader.textContent !== 'Вход' || document.querySelector('.visit-card')){
-            createVisitCreationForm();
-            // createEl(visitCreationFormContent, Modal, 'beforeend', modal);
-            visitCreationForm = document.querySelector('.visit-creation');        
-            options = `<option value="placeholder" value =1>Выберите врача..</option> 
+        
+        createVisitCreationForm();
+        visitCreationForm = document.querySelector('.visit-creation');        
+        options = `<option value="placeholder" value =1>Выберите врача..</option> 
             <option value="cardiologist">Кардиолог</option> 
             <option value="dentist">Стоматолог</option>
             <option value="therapist">Терапевт</option>`
     
-            createEl(["doctors-selection", options], Select, 'afterbegin', visitCreationForm);
+        createEl(["doctors-selection", options], Select, 'afterbegin', visitCreationForm);
     
-            modal.addEventListener('change', visitCreate);
-        // }
+        modal.addEventListener('change', visitCreate);
     }
 })
 
@@ -208,19 +206,7 @@ function visitCreate(e){
     if(visitInputsGeneral.style.display !== 'flex') {
         visitInputsGeneral.style.display = 'flex';
 
-            if(visitInputsGeneral.children.length < 7) {
-                createEl(['text', 'visit-purpose'], Input, 'afterend', document.querySelector('label[for="visit-purpose"]'));
-                createEl(['visit-desc', '30'], Textarea, 'afterend', document.querySelector('label[for="visit-desc"]'));
-    
-                options = `<option value="placeholder" selected>Срочность</option> 
-                    <option value="normal">обычная</option> 
-                    <option value="priority">приоритетная</option> 
-                    <option value="urgent">неотложная</option>`
-    
-                createEl(["visit-urgency", options], Select, 'afterend', document.querySelector('textarea[id="visit-desc"]'));
-                createEl(['text', 'visit-details'], Input, 'afterend', document.querySelector('label[for="visit-details"]')); 
-            }
-            // (Миронец) - добавляю событие по нажатию на СОЗДАТь--------------
+        visitInputsGeneralCreation(visitInputsGeneral);
             btnCreate.addEventListener('click',(ev)=>{
                 ev.preventDefault();
                 
@@ -284,6 +270,21 @@ function therapistInputs(visitInputsCollection){
             el.style.display = 'none'
         }
     } );
+}
+
+function visitInputsGeneralCreation(visitInputsGeneral){
+    if(visitInputsGeneral.children.length < 7) {
+        createEl(['text', 'visit-purpose'], Input, 'afterend', document.querySelector('label[for="visit-purpose"]'));
+        createEl(['visit-desc', '30'], Textarea, 'afterend', document.querySelector('label[for="visit-desc"]'));
+
+        options = `<option value="placeholder" selected>Срочность</option> 
+            <option value="normal">обычная</option> 
+            <option value="priority">приоритетная</option> 
+            <option value="urgent">неотложная</option>`
+
+        createEl(["visit-urgency", options], Select, 'afterend', document.querySelector('textarea[id="visit-desc"]'));
+        createEl(['text', 'visit-details'], Input, 'afterend', document.querySelector('label[for="visit-details"]')); 
+    }
 }
 
 
