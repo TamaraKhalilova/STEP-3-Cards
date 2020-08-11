@@ -221,22 +221,30 @@ function deleteCard(arrayVisits){
 }
 
 // tamara: editCard() - редактировать карточку
-
 const visitBoard = document.querySelector('.visit-board');
 visitBoard.addEventListener('click', (event)=>{
     if(!event.target.classList.contains('btn-change')) return;
 
+    localStorage.setItem('action', 'editing');
     modal.style.display = 'block';
 
-    if (!visitCreationForm) createVisitCreationForm();
+    if (!visitCreationForm) {
+        createVisitCreationForm();
+        createDoctorsSlct();
+    }
+
     visitCreationForm = document.querySelector('.visit-creation');
     visitCreationForm.style.display = 'flex';
+    pageWrapper.style.filter = 'blur(5px)';
+
+
 
     const visitInputsGeneral = document.querySelector('.visit-inputs--general');
     const visitInputsCollection = document.querySelectorAll('.visit-inputs');
     
     visitInputsGeneral.style.display = 'flex';
     visitInputsGeneralCreation(visitInputsGeneral);
+
     switch (event.target.closest('.visit-card').children[1].textContent.split(' ')[1]) {
         case 'cardiologist':
             cardiologistInputs(visitInputsCollection);
@@ -248,7 +256,10 @@ visitBoard.addEventListener('click', (event)=>{
             therapistInputs(visitInputsCollection);
             break;
     }
-    createSaveBtn(visitCreationForm);
+
+    const save = document.querySelector('.btn--save');
+    (!save) ? createSaveBtn(visitCreationForm) : save.style.display = 'block';
+
 });
 
 function createSaveBtn(visitCreationForm){
@@ -257,6 +268,11 @@ function createSaveBtn(visitCreationForm){
     save.classList.add('btn');
     save.textContent = 'Сохранить';
     visitCreationForm.append(save);
+    const createBtn = document.querySelector('.btn--create');
+    if(createBtn){
+        createBtn.style.display = 'none'
+    }
+    return save
 }
 
 async function requestDeleteCard(cardId, card) {

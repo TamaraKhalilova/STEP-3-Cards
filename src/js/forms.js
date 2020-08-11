@@ -134,6 +134,7 @@ if (localStorage.getItem('token')) {
 //cобытия по нажатию кнопки в хедере
 btnHeader.addEventListener('click', ()=>{
 
+    localStorage.setItem('action', 'creation');
     modal.style.display = 'block';
     pageWrapper.style.filter = 'blur(5px)';
     if (btnHeader.textContent === 'Вход'){
@@ -144,8 +145,9 @@ btnHeader.addEventListener('click', ()=>{
         modal.addEventListener('submit', getLogin);
     } else {
         autorizationForm.style.display = 'none';
-        visitCreationForm = document.querySelector('.visit-creation');       
-        if(visitCreationForm){
+        visitCreationForm = document.querySelector('.visit-creation');
+
+        if(visitCreationForm ){
             visitCreationForm.style.display = 'flex';
             basicOption = document.querySelectorAll(`option`);    
             basicOption.forEach(el=>{
@@ -154,19 +156,23 @@ btnHeader.addEventListener('click', ()=>{
             });
             return;
         }
-        
+
         createVisitCreationForm();
-        visitCreationForm = document.querySelector('.visit-creation');        
-        options = `<option value="placeholder" value =1>Выберите врача..</option> 
-            <option value="cardiologist">Кардиолог</option> 
-            <option value="dentist">Стоматолог</option>
-            <option value="therapist">Терапевт</option>`
-    
-        createEl(["doctors-selection", options], Select, 'afterbegin', visitCreationForm);
-    
-        modal.addEventListener('change', visitCreate);
+        createDoctorsSlct();
     }
 })
+
+function createDoctorsSlct(){
+    visitCreationForm = document.querySelector('.visit-creation');        
+    options = `<option value="placeholder" value =1>Выберите врача..</option> 
+        <option value="cardiologist">Кардиолог</option> 
+        <option value="dentist">Стоматолог</option>
+        <option value="therapist">Терапевт</option>`
+
+    createEl(["doctors-selection", options], Select, 'afterbegin', visitCreationForm);
+
+    modal.addEventListener('change', visitCreate);
+}
 
 function createVisitCreationForm(){
     createEl(visitCreationFormContent, Modal, 'beforeend', modal);
@@ -201,7 +207,9 @@ function visitCreate(e){
     const visitInputsGeneral = document.querySelector('.visit-inputs--general');
     const visitInputsCollection = document.querySelectorAll('.visit-inputs');
     const btnCreate = document.querySelector('.btn--create');
-    btnCreate.style.display = 'block';
+    const save = document.querySelector('.btn--save');
+
+    (localStorage.getItem('action') === 'creation')? btnCreate.style.display = 'block' : save.style.display = 'block';
 
     if(visitInputsGeneral.style.display !== 'flex') {
         visitInputsGeneral.style.display = 'flex';
@@ -212,7 +220,8 @@ function visitCreate(e){
                 
                 addCard(getCardFromForm());
                 modal.style.display = 'none';  
-                pageWrapper.style.filter = '';    
+                pageWrapper.style.filter = '';
+                localStorage.removeItem('action');    
             })
 
 // ---------------------------------
@@ -295,6 +304,7 @@ modal.addEventListener('click', (e)=>{
     visitCreationForm = document.querySelector('.visit-creation');
     e.target.parentElement.style.display = 'none';
     modalClose();
+    localStorage.removeItem('action');
 })
 
 //cобытие: нажатие области вокруг модального окна
@@ -304,6 +314,7 @@ page.addEventListener('click', (event)=>{
         && !event.target.classList.contains('btn-change')) {
         modal.style.display = 'none';
         modalClose();
+        localStorage.removeItem('action');
     }
 })
 
