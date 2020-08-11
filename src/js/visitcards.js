@@ -1,5 +1,6 @@
 // необходимые импорты из forms.js: modal, func visitCreationForm, func createVisitCreationForm, visitInputsCollection, 
-// func cardiologistInputs(visitInputsCollection), func dentistInputs(visitInputsCollection), func therapistInputs(visitInputsCollection);
+// func cardiologistInputs(visitInputsCollection), func dentistInputs(visitInputsCollection), 
+// func therapistInputs(visitInputsCollection), visitInputsGeneralCreation(visitInputsGeneral)
 
 class Visit {
     constructor({id, title, doctor, fio, description, urgency}){
@@ -233,26 +234,30 @@ visitBoard.addEventListener('click', (event)=>{
 
     const visitInputsGeneral = document.querySelector('.visit-inputs--general');
     const visitInputsCollection = document.querySelectorAll('.visit-inputs');
-
-    // если уже создавали карточку
-    if(visitInputsGeneral){
-        visitInputsGeneral.style.display = 'flex';
-
-        switch (event.target.closest('.visit-card').children[1].textContent.split(' ')[1]) {
-            case 'cardiologist':
-                cardiologistInputs(visitInputsCollection);
-              break;
-            case 'dentist':
-                dentistInputs(visitInputsCollection);
-              break;
-            case 'therapist':
-                therapistInputs(visitInputsCollection);
-              break;
-          }
-    } else{
-        
+    
+    visitInputsGeneral.style.display = 'flex';
+    visitInputsGeneralCreation(visitInputsGeneral);
+    switch (event.target.closest('.visit-card').children[1].textContent.split(' ')[1]) {
+        case 'cardiologist':
+            cardiologistInputs(visitInputsCollection);
+            break;
+        case 'dentist':
+            dentistInputs(visitInputsCollection);
+            break;
+        case 'therapist':
+            therapistInputs(visitInputsCollection);
+            break;
     }
+    createSaveBtn(visitCreationForm);
 });
+
+function createSaveBtn(visitCreationForm){
+    const save = document.createElement('a');
+    save.classList.add('btn--save');
+    save.classList.add('btn');
+    save.textContent = 'Сохранить';
+    visitCreationForm.append(save);
+}
 
 async function requestDeleteCard(cardId, card) {
     await axios({
