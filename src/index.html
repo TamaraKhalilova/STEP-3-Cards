@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,6 +11,7 @@
     <script defer src="js/script.min.js"></script>
     <script defer src="js/visitcards.js"></script>
 </head>
+
 <body>
     <div class="page">
         <div class="page__wrapper">
@@ -21,6 +23,30 @@
                 <a href="#" class="btn btn--header">Вход</a>
             </header>
             <main class="main">
+                <div class="filter">
+                    <form class="filter__form" id="search-form" action="">
+                        <input type="text" class="filter__search" placeholder="Искать...">
+                        <div>
+                            <h2 class="filter__title">Врач:</h2>
+                            <select class="filter__options" id="status-doctor">
+                                <option class="filter__option" value="all">Все</option>
+                                <option class="filter__option" value="Dentist">Дантист</option>
+                                <option class="filter__option" value="Cardiologist">Кардиолог</option>
+                                <option class="filter__option" value="Therapist">Терапевт</option>
+                            </select>
+                        </div>
+                        <div>
+                            <h2 class="filter__title">Срочность:</h2>
+                            <select class="filter__options" id="status-priority">
+                                <option class="filter__option" value="all">Все</option>
+                                <option class="filter__option" value="low">Обычная</option>
+                                <option class="filter__option" value="normal">Приоритетная</option>
+                                <option class="filter__option" value="high">Неотложная</option>
+                            </select>
+                        </div>
+                        <button class="filter__search-btn" id="search">Поиск</button>
+                    </form>
+                </div>
                 <div class="visit-board"></div>
             </main>
             <footer class="footer">
@@ -29,4 +55,5 @@
         </div>
     </div>
 </body>
+
 </html>

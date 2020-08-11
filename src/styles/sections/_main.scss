@@ -1,7 +1,8 @@
 /* ВРЕМЕННО */
-.main{
-    height: calc(100vh - 110px - 82px);    
+.main {
+    height: calc(100vh - 110px - 82px);
 }
+
 .visit-board {
     padding: 10px;
     display: grid;
@@ -9,12 +10,12 @@
     grid-gap: 6px;
 }
 
-.visit-card-hide{
+.visit-card-hide {
     display: none;
 }
 
-.btn-visit {    
-    font-size:12px;
+.btn-visit {
+    font-size: 12px;
     padding: .4em;
     background-color: rgb(228, 228, 230);
     border-radius: 10px;
@@ -22,46 +23,127 @@
     color: rgb(95, 89, 89);
     font-family: inherit;
     cursor: pointer;
-    text-shadow:  1px 1px 2px rgb(248, 151, 151), 0 0 1em rgba(195, 195, 204, 0.836), 0 0 0.2em rgb(137, 137, 161);
-  
-    &:hover{
+    text-shadow: 1px 1px 2px rgb(248, 151, 151), 0 0 1em rgba(195, 195, 204, 0.836), 0 0 0.2em rgb(137, 137, 161);
+
+    &:hover {
         background-color: rgb(243, 243, 247);
-    } 
+    }
 }
+
 .btn-delete {
-    background-color: rgb(255,204,255);
-    &:hover{
-        background-color: rgb(255,153,255);
-    } 
+    background-color: rgb(255, 204, 255);
+
+    &:hover {
+        background-color: rgb(255, 153, 255);
+    }
 }
+
 .btn-change {
-    &:hover{
+    &:hover {
         background-color: #c9f;
     }
 }
 
 .visit-card {
     border-radius: 7px;
-    box-shadow: 0 0 3px rgba(0,0,0,0.8);
-    & >p {
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.8);
+
+    &>p {
         padding: .2em;
     }
-    & >.open-visit{
+
+    &>.open-visit {
         text-align: right;
         padding-right: 1em;
         font-style: oblique;
         color: #FF4500;
-        &:hover{
+
+        &:hover {
             cursor: pointer;
         }
     }
-    & >div {       
-        & >p {
+
+    &>div {
+        &>p {
             padding: .2em;
         }
-        & :last-child{           
+
+        & :last-child {
             display: flex;
             justify-content: space-evenly;
         }
+    }
+}
+
+.filter {
+    margin: 1em auto;
+    font-family: Montserrat, serif;
+
+    &__form {
+        display: flex;
+        justify-content: space-around;
+        align-items: flex-end;
+    }
+
+    &__form div {
+        display: flex;
+        flex-direction: column;
+    }
+
+    &__title {
+        margin-bottom: 0.7em;
+        font-size: 1.3em;
+        color: rgb(95, 89, 89);
+        text-shadow: 1px 1px 2px #888;
+        text-align: center;
+    }
+
+    &__search {
+        font-family: Montserrat, serif;
+        padding: 10px;
+        margin: 0;
+        border-radius: 4px;
+        box-shadow: 0 3px 0 #ccc, 0 -1px #fff inset;
+        background: #f8f8f8;
+        color: #888;
+        border: none;
+        outline: none;
+        appearance: none;
+        cursor: pointer;
+        max-width: 200px;
+        text-align: center;
+    }
+
+    &__options {
+        font-family: Montserrat, serif;
+        font-size: 16px;
+        padding: 10px;
+        margin: 0;
+        border-radius: 4px;
+        box-shadow: 0 3px 0 #ccc, 0 -1px #fff inset;
+        background: #f8f8f8;
+        color: #888;
+        border: none;
+        outline: none;
+        appearance: none;
+        cursor: pointer;
+        min-width: 200px;
+        text-align: right;
+    }
+
+    &__search-btn {
+        padding: 10px;
+        margin: 0;
+        border-radius: 4px;
+        box-shadow: 0 3px 0 #ccc, 0 -1px #fff inset;
+        background: #f8f8f8;
+        color: #888;
+        border: none;
+        outline: none;
+        appearance: none;
+        cursor: pointer;
+        min-width: 200px;
+        text-align: center;
+        text-transform: uppercase;
     }
 }
