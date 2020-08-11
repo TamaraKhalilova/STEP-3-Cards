@@ -3,7 +3,14 @@
 // func therapistInputs(visitInputsCollection), visitInputsGeneralCreation(visitInputsGeneral)
 
 class Visit {
-    constructor({id, title, doctor, fio, description, urgency}){
+    constructor({
+        id,
+        title,
+        doctor,
+        fio,
+        description,
+        urgency
+    }) {
         this.id = id
         this.title = title
         this.doctor = doctor
@@ -16,15 +23,33 @@ class Visit {
 }
 
 class VisitCardiologist extends Visit {
-    constructor({id, title, doctor, fio, description, urgency, normalpreasure, massindex, diseases, age}){
-        super({id, title, doctor, fio, description, urgency})
+    constructor({
+        id,
+        title,
+        doctor,
+        fio,
+        description,
+        urgency,
+        normalpreasure,
+        massindex,
+        diseases,
+        age
+    }) {
+        super({
+            id,
+            title,
+            doctor,
+            fio,
+            description,
+            urgency
+        })
         this.normalpreasure = normalpreasure
         this.massindex = massindex
         this.diseases = diseases
         this.age = age
     }
 
-    render(){
+    render() {
         return `<div class="visit-card" data-id="${this.id}">
                     <p>Пациент: ${this.fio}</p>
                     <p>Доктор: ${this.doctor}</p>
@@ -43,17 +68,32 @@ class VisitCardiologist extends Visit {
                         </p>              
                     </div>
                 </div>`
-        
+
     }
 }
 
 class VisitDentist extends Visit {
-    constructor({id, title, doctor, fio, description, urgency, data}){
-        super({id, title, doctor, fio, description, urgency})
+    constructor({
+        id,
+        title,
+        doctor,
+        fio,
+        description,
+        urgency,
+        data
+    }) {
+        super({
+            id,
+            title,
+            doctor,
+            fio,
+            description,
+            urgency
+        })
         this.data = data
     }
 
-    render(){
+    render() {
         return `<div class="visit-card" data-id="${this.id}">
                     <p>Пациент: ${this.fio}</p>
                     <p>Доктор: ${this.doctor}</p>
@@ -73,12 +113,27 @@ class VisitDentist extends Visit {
 }
 
 class VisitTherapists extends Visit {
-    constructor({id, title, doctor, fio, description, urgency, age}){
-        super({id, title, doctor, fio, description, urgency})
+    constructor({
+        id,
+        title,
+        doctor,
+        fio,
+        description,
+        urgency,
+        age
+    }) {
+        super({
+            id,
+            title,
+            doctor,
+            fio,
+            description,
+            urgency
+        })
         this.age = age
     }
 
-    render(){
+    render() {
         return `<div class="visit-card" data-id="${this.id}">
                     <p>Пациент: ${this.fio}</p>
                     <p>Доктор: ${this.doctor}</p>
@@ -99,7 +154,7 @@ class VisitTherapists extends Visit {
 
 //добавление визита
 
-function getCardFromForm(){
+function getCardFromForm() {
     const formVisit = document.querySelector('.modal')
     const newCard = {};
     newCard.doctor = document.querySelector('[name="doctors-selection"]').value;
@@ -107,28 +162,30 @@ function getCardFromForm(){
     newCard.description = document.querySelector('#visit-desc').value;
     newCard.urgency = document.querySelector('[name="visit-urgency"]').value;
     newCard.fio = document.querySelector('#visit-details').value;
-        switch (newCard.doctor){
-            case 'cardiologist':
-                newCard.normalpreasure = document.querySelector('#visit-pressure').value;
-                newCard.massindex = document.querySelector('#visit-weight').value;
-                newCard.diseases = document.querySelector('#visit-diseases').value;
-                newCard.age = document.querySelector('#visit-age').value;
+    switch (newCard.doctor) {
+        case 'cardiologist':
+            newCard.normalpreasure = document.querySelector('#visit-pressure').value;
+            newCard.massindex = document.querySelector('#visit-weight').value;
+            newCard.diseases = document.querySelector('#visit-diseases').value;
+            newCard.age = document.querySelector('#visit-age').value;
             break;
-            case 'dentist':
-                newCard.data = document.querySelector('#visit-date').value;
+        case 'dentist':
+            newCard.data = document.querySelector('#visit-date').value;
             break;
-            case 'therapist':
-                newCard.age = document.querySelector('#visit-age').value;
+        case 'therapist':
+            newCard.age = document.querySelector('#visit-age').value;
             break;
-        };
+    };
     return newCard
 }
 
 async function addCard(body) {
-    await axios({    
-            method: 'post', 
-            url: 'https://cards.danit.com.ua/cards',    
-            headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+    await axios({
+            method: 'post',
+            url: 'https://cards.danit.com.ua/cards',
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            },
             data: body
         })
         .then(response => {
@@ -136,18 +193,21 @@ async function addCard(body) {
         })
         .catch(error => console.log(error));
 
-        addMessage(document.querySelectorAll('.visit-card').length, document.querySelector('.visit-board' ));
-        showHideVisit(document.querySelectorAll('.open-visit'));
-        deleteCard(document.querySelectorAll('.btn-delete'))  
+    addMessage(document.querySelectorAll('.visit-card').length, document.querySelector('.visit-board'));
+    showHideVisit(document.querySelectorAll('.open-visit'));
+    deleteCard(document.querySelectorAll('.btn-delete'))
 }
 
 
+
 function addCardVisit (visit, position = 'beforeend'){
+
     const visitBoard = document.querySelector('.visit-board');
     let newVisit
-    switch (visit.doctor){
+    switch (visit.doctor) {
         case 'dentist':
             newVisit = new VisitDentist(visit);
+
             visitBoard.insertAdjacentHTML(position, newVisit.render());
         break;
         case 'cardiologist':
@@ -158,48 +218,48 @@ function addCardVisit (visit, position = 'beforeend'){
             newVisit = new VisitTherapists(visit);
             visitBoard.insertAdjacentHTML(position, newVisit.render());
         break;      
+
     }
 }
+
 
 
 async function loadCards(){
     await axios.get('https://cards.danit.com.ua/cards',    
         {headers: { "Authorization" : `Bearer ${localStorage.getItem('token')}` } 
         })
+
         .then(response => response.data.forEach(visit => addCardVisit(visit)));
 
-        
-        addMessage(document.querySelectorAll('.visit-card').length, document.querySelector('.visit-board' ));
-        showHideVisit(document.querySelectorAll('.open-visit'));
-        deleteCard(document.querySelectorAll('.btn-delete'))
+
+    addMessage(document.querySelectorAll('.visit-card').length, document.querySelector('.visit-board'));
+    showHideVisit(document.querySelectorAll('.open-visit'));
+    deleteCard(document.querySelectorAll('.btn-delete'))
 }
-    
+
 
 
 //addMessage  - удаляет/добавляет сообщение о наличии бланков
-function addMessage(countElem, onElement){
+function addMessage(countElem, onElement) {
     if (countElem === 0 && !document.getElementById('noitem')) {
         onElement.insertAdjacentHTML(
             'beforeend', `<p id="noitem">No items have been added</p>`
         );
-    }
-    else if (countElem > 0 && document.getElementById('noitem'))
-    {
+    } else if (countElem > 0 && document.getElementById('noitem')) {
         onElement.removeChild(document.getElementById('noitem'));
     }
 }
 
 // showHideVisit   - регулирует полное/частичное отображение бланков визитов
 
-function showHideVisit(arrayVisits){
-    arrayVisits.forEach((elem)=>{
-        elem.addEventListener('click',(event)=>{
+function showHideVisit(arrayVisits) {
+    arrayVisits.forEach((elem) => {
+        elem.addEventListener('click', (event) => {
             event.currentTarget.nextElementSibling.classList.toggle("visit-card-hide")
-            if (event.currentTarget.nextElementSibling.classList.contains('visit-card-hide')){
-                event.currentTarget.innerText = 'Показать';                
-            }  
-            else{
-                event.currentTarget.innerText = 'Скрыть';                
+            if (event.currentTarget.nextElementSibling.classList.contains('visit-card-hide')) {
+                event.currentTarget.innerText = 'Показать';
+            } else {
+                event.currentTarget.innerText = 'Скрыть';
             }
             event.stopImmediatePropagation();
         });
@@ -207,13 +267,13 @@ function showHideVisit(arrayVisits){
 }
 
 // deleteCard() - удалить карточку
-function deleteCard(arrayVisits){
-    arrayVisits.forEach((elem)=>{
-        elem.addEventListener('click',(event)=>{
+function deleteCard(arrayVisits) {
+    arrayVisits.forEach((elem) => {
+        elem.addEventListener('click', (event) => {
             let card = event.currentTarget.parentElement.parentElement.parentElement;
             let cardId = card.dataset.id;
             requestDeleteCard(cardId, card);
-            
+
         });
     });
 }
@@ -237,8 +297,8 @@ async function requestDeleteCard(cardId, card) {
 
 // tamara: editCard() - редактировать карточку
 const visitBoard = document.querySelector('.visit-board');
-visitBoard.addEventListener('click', (event)=>{
-    if(!event.target.classList.contains('btn-change')) return;
+visitBoard.addEventListener('click', (event) => {
+    if (!event.target.classList.contains('btn-change')) return;
 
     localStorage.setItem('action', 'editing');
     modal.style.display = 'block';
@@ -256,7 +316,7 @@ visitBoard.addEventListener('click', (event)=>{
 
     const visitInputsGeneral = document.querySelector('.visit-inputs--general');
     const visitInputsCollection = document.querySelectorAll('.visit-inputs');
-    
+
     visitInputsGeneral.style.display = 'flex';
     visitInputsGeneralCreation(visitInputsGeneral);
     
@@ -276,12 +336,16 @@ visitBoard.addEventListener('click', (event)=>{
     setCardOnForm(cardId) // Миронец
 
     const save = document.querySelector('.btn--save');
+
     (!save) ? createSaveBtn(visitCreationForm, cardId) : save.style.display = 'block';
+
 
         
 });
+
 // Миронец добавил dataset
 function createSaveBtn(visitCreationForm, cardId){
+
     const save = document.createElement('a');
     save.classList.add('btn--save');
     save.classList.add('btn');
@@ -289,12 +353,13 @@ function createSaveBtn(visitCreationForm, cardId){
     save.dataset.id = cardId; // Миронец
     visitCreationForm.append(save);
     const createBtn = document.querySelector('.btn--create');
-    if(createBtn){
+    if (createBtn) {
         createBtn.style.display = 'none'
     }
    
     return save
 }
+
 
 
 
@@ -324,6 +389,7 @@ async function setCardOnForm(cardId) {
                 };
         })
     
+
 }
 
 const form = document.querySelector('.modal');
@@ -344,6 +410,7 @@ modal.addEventListener('click', (ev)=>{
 
 async function requestChangeCard(cardId, body,) {
     await axios({
+
         method: 'PUT',
         url: `http://cards.danit.com.ua/cards/${cardId}`,
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
@@ -365,6 +432,7 @@ function deleteVisits(){
     let visits = document.querySelectorAll('.visit-card')
     visits.forEach(e => e.remove())
 }
+
 
 
 
