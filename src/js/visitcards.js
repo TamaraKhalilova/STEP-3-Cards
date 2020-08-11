@@ -1,4 +1,5 @@
-// необходимые импорты из forms.js: modal, visitCreationForm, createVisitCreationForm, visitInputsCollection
+// необходимые импорты из forms.js: modal, func visitCreationForm, func createVisitCreationForm, visitInputsCollection, 
+// func cardiologistInputs(visitInputsCollection), func dentistInputs(visitInputsCollection), func therapistInputs(visitInputsCollection);
 
 class Visit {
     constructor({id, title, doctor, fio, description, urgency}){
@@ -140,8 +141,6 @@ async function addCard(body) {
 }
 
 
-
-
 function addCardVisit (visit){
     const visitBoard = document.querySelector('.visit-board');
     let newVisit
@@ -176,10 +175,6 @@ async function loadCards(){
         deleteCard(document.querySelectorAll('.btn-delete'))
 }
     
-
-
-
-
 
 
 //addMessage  - удаляет/добавляет сообщение о наличии бланков
@@ -225,19 +220,39 @@ function deleteCard(arrayVisits){
 }
 
 // tamara: editCard() - редактировать карточку
-// const visitBoard = document.querySelector('.visit-board');
-// visitBoard.addEventListener('click', (event)=>{
-//     if(!event.target.classList.contains('btn-change')) return;
 
-//     modal.style.display = 'block';
-//     if (!visitCreationForm) createVisitCreationForm();
-//     visitCreationForm = document.querySelector('.visit-creation');
-//     visitCreationForm.style.display = 'flex';
-//     const visitInputsCollection = document.querySelectorAll('.visit-inputs');
-//     // appearVisitInputs();
-            
+const visitBoard = document.querySelector('.visit-board');
+visitBoard.addEventListener('click', (event)=>{
+    if(!event.target.classList.contains('btn-change')) return;
 
-// });
+    modal.style.display = 'block';
+
+    if (!visitCreationForm) createVisitCreationForm();
+    visitCreationForm = document.querySelector('.visit-creation');
+    visitCreationForm.style.display = 'flex';
+
+    const visitInputsGeneral = document.querySelector('.visit-inputs--general');
+    const visitInputsCollection = document.querySelectorAll('.visit-inputs');
+
+    // если уже создавали карточку
+    if(visitInputsGeneral){
+        visitInputsGeneral.style.display = 'flex';
+
+        switch (event.target.closest('.visit-card').children[1].textContent.split(' ')[1]) {
+            case 'cardiologist':
+                cardiologistInputs(visitInputsCollection);
+              break;
+            case 'dentist':
+                dentistInputs(visitInputsCollection);
+              break;
+            case 'therapist':
+                therapistInputs(visitInputsCollection);
+              break;
+          }
+    } else{
+        
+    }
+});
 
 async function requestDeleteCard(cardId, card) {
     await axios({
