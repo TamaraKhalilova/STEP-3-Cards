@@ -199,33 +199,36 @@ async function addCard(body) {
 }
 
 
-function addCardVisit(visit) {
+
+function addCardVisit (visit, position = 'beforeend'){
+
     const visitBoard = document.querySelector('.visit-board');
     let newVisit
     switch (visit.doctor) {
         case 'dentist':
             newVisit = new VisitDentist(visit);
-            visitBoard.insertAdjacentHTML('beforeend', newVisit.render());
-            break;
+
+            visitBoard.insertAdjacentHTML(position, newVisit.render());
+        break;
         case 'cardiologist':
             newVisit = new VisitCardiologist(visit);
-            visitBoard.insertAdjacentHTML('beforeend', newVisit.render());
-            break;
+            visitBoard.insertAdjacentHTML(position, newVisit.render());
+        break;
         case 'therapist':
             newVisit = new VisitTherapists(visit);
-            visitBoard.insertAdjacentHTML('beforeend', newVisit.render());
-            break;
+            visitBoard.insertAdjacentHTML(position, newVisit.render());
+        break;      
+
     }
 }
 
 
-async function loadCards() {
-    await axios.get(
-            'https://cards.danit.com.ua/cards', {
-                headers: {
-                    "Authorization": `Bearer ${localStorage.getItem('token')}`
-                }
-            })
+
+async function loadCards(){
+    await axios.get('https://cards.danit.com.ua/cards',    
+        {headers: { "Authorization" : `Bearer ${localStorage.getItem('token')}` } 
+        })
+
         .then(response => response.data.forEach(visit => addCardVisit(visit)));
 
 
@@ -274,6 +277,23 @@ function deleteCard(arrayVisits) {
         });
     });
 }
+async function requestDeleteCard(cardId, card) {
+    await axios({
+        method: 'DELETE',
+        url: `http://cards.danit.com.ua/cards/${cardId}`,
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+    })
+    .then(response => {
+        if (response.data.status === "Success"){
+            card.remove();
+            addMessage(document.querySelectorAll('.visit-card').length, document.querySelector('.visit-board' ));
+        }       
+        else {
+            throw new Error('не удалось удалить карточку')
+        }
+    })
+    .catch(error => console.log(error));
+}
 
 // tamara: editCard() - редактировать карточку
 const visitBoard = document.querySelector('.visit-board');
@@ -299,7 +319,7 @@ visitBoard.addEventListener('click', (event) => {
 
     visitInputsGeneral.style.display = 'flex';
     visitInputsGeneralCreation(visitInputsGeneral);
-
+    
     switch (event.target.closest('.visit-card').children[1].textContent.split(' ')[1]) {
         case 'cardiologist':
             cardiologistInputs(visitInputsCollection);
@@ -312,73 +332,107 @@ visitBoard.addEventListener('click', (event) => {
             break;
     }
 
-    const save = document.querySelector('.btn--save');
-    (!save) ? createSaveBtn(visitCreationForm): save.style.display = 'block';
+    let cardId = event.target.parentElement.parentElement.parentElement.dataset.id
+    setCardOnForm(cardId) // Миронец
 
+    const save = document.querySelector('.btn--save');
+
+    (!save) ? createSaveBtn(visitCreationForm, cardId) : save.style.display = 'block';
+
+
+        
 });
 
-function createSaveBtn(visitCreationForm) {
+// Миронец добавил dataset
+function createSaveBtn(visitCreationForm, cardId){
+
     const save = document.createElement('a');
     save.classList.add('btn--save');
     save.classList.add('btn');
     save.textContent = 'Сохранить';
+    save.dataset.id = cardId; // Миронец
     visitCreationForm.append(save);
     const createBtn = document.querySelector('.btn--create');
     if (createBtn) {
         createBtn.style.display = 'none'
     }
+   
     return save
 }
 
-async function requestDeleteCard(cardId, card) {
-    await axios({
-            method: 'DELETE',
-            url: `http://cards.danit.com.ua/cards/${cardId}`,
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`
-            }
+
+
+
+async function setCardOnForm(cardId) {
+    await axios.get(`http://cards.danit.com.ua/cards/${cardId}`,
+    {headers: { "Authorization" : `Bearer ${localStorage.getItem('token')}` } 
         })
         .then(response => {
-            if (response.data.status === "Success") {
-                card.remove();
-                addMessage(document.querySelectorAll('.visit-card').length, document.querySelector('.visit-board'));
-            } else {
-                throw new Error('не удалось удалить карточку')
-            }
+            document.querySelector('[name="doctors-selection"]').value = response.data.doctor;
+            document.querySelector('#visit-purpose').value = response.data.title 
+            document.querySelector('#visit-desc').value = response.data.description;
+            document.querySelector('[name="visit-urgency"]').value = response.data.urgency;
+            document.querySelector('#visit-details').value = response.data.fio;
+                switch (response.doctor){
+                    case 'cardiologist':
+                        document.querySelector('#visit-pressure').value = response.data.normalpreasure;
+                        document.querySelector('#visit-weight').value = response.data.massindex;
+                        document.querySelector('#visit-diseases').value = response.data.diseases;
+                        document.querySelector('#visit-age').value = response.data.age;
+                    break;
+                    case 'dentist':
+                        document.querySelector('#visit-date').value = response.data.data;
+                    break;
+                    case 'therapist':
+                        document.querySelector('#visit-age').value = response.data.age;
+                    break;
+                };
         })
-        .catch(error => console.log(error));
+    
+
 }
+
+const form = document.querySelector('.modal');
+modal.addEventListener('click', (ev)=>{
+    if(!ev.target.classList.contains('btn--save')) return;
+
+    let cardId = ev.target.dataset.id;
+    
+    requestChangeCard(cardId,getCardFromForm());
+    modal.style.display = 'none';  
+    pageWrapper.style.filter = '';
+
+});
+
 
 // changeCard() - изменить карточку - нужно модальное окно
 //  функция зарос:
 
-async function requestChangeCard(cardId, body) {
+async function requestChangeCard(cardId, body,) {
     await axios({
-            method: 'PUT',
-            url: `http://cards.danit.com.ua/cards/${cardId}`,
-            headers: {
-                Authorization: `Bearer ${token}`
-            },
-            data: body
-        })
-        .then(response => {
-            if (response.data.status === "Success") {
-                console.log('получилось!')
-            } else {
-                throw new Error('не удалось изменить карточку')
-            }
-        })
-        .catch(error => console.log(error));
+
+        method: 'PUT',
+        url: `http://cards.danit.com.ua/cards/${cardId}`,
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+        data: body
+    })
+    .then(response => {
+        if (response.status === 200){
+            deleteVisits();
+            loadCards();
+        }       
+        else {
+            throw new Error('не удалось изменить карточку')
+        }
+    })
+    .catch(error => console.log(error));
 }
 
-// addCard(cardUser);
-
-const alteredCardUser = {
-    "title": "Визит к терапевту",
-    "description": 'Плановый визит',
-    "doctor": "therapists",
-    "fio": "Николаев Николай Николаевич",
-    "urgency": "normal",
-    "data": "10-10-20"
+function deleteVisits(){
+    let visits = document.querySelectorAll('.visit-card')
+    visits.forEach(e => e.remove())
 }
-// requestChangeCard(9724, alteredCardUser);
+
+
+
+
