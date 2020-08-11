@@ -236,33 +236,13 @@ function visitCreate(e){
             Array.from(visitCreationForm.children).forEach(el => (el.tagName !== 'SELECT')? el.style.display = 'none': null);
         break;
         case 'cardiologist':
-            visitInputsCollection.forEach(el =>el.classList.contains('cardiologist') ? el.style.display = 'flex' : el.style.display = 'none'); 
-        
-            const cardiologistInputs = document.querySelector('.visit-inputs.cardiologist');
-
-            if(cardiologistInputs.children.length < 4) {
-                createEl(['text', 'visit-pressure'], Input, 'afterend', document.querySelector('label[for="visit-pressure"]'));
-                createEl(['text', 'visit-weight'], Input, 'afterend', document.querySelector('label[for="visit-weight"]'));
-                createEl(['text', 'visit-diseases'], Input, 'afterend', document.querySelector('label[for="visit-diseases"]'));
-                createCardioDentistInput(); 
-            }
+            cardiologistInputs(visitInputsCollection);
         break;
         case 'dentist':
-            visitInputsCollection.forEach(el => el.classList.contains('dentist') ? el.style.display = 'flex' : el.style.display = 'none');
-            const cardiologistDentist = document.querySelector('.visit-inputs.dentist');
-
-            if(cardiologistDentist.children.length < 2) createEl(['text', 'visit-date'], Input, 'afterend', document.querySelector('label[for="visit-date"]'));
+            dentistInputs(visitInputsCollection);
         break;
         case 'therapist':
-            visitInputsCollection.forEach(el => {
-                if(el.classList.contains('cardiologist') && el.classList.contains('therapist')){
-                     el.style.display = 'block';
-                     createCardioDentistInput();
-                } else {
-                    el.style.display = 'none'
-                }
-            } );
-
+            therapistInputs(visitInputsCollection);
         break;
     }
 }
@@ -270,6 +250,40 @@ function visitCreate(e){
 //проверка на существование поля Возраст у кардиолога и терапевта + его создание
 function createCardioDentistInput(){
     if(!document.querySelector('#visit-age')){createEl(['number', 'visit-age'], Input, 'afterend', document.querySelector('label[for="visit-age"]')); }
+}
+
+//case: cardiologist
+function cardiologistInputs(visitInputsCollection){
+    visitInputsCollection.forEach(el =>el.classList.contains('cardiologist') ? el.style.display = 'flex' : el.style.display = 'none'); 
+        
+    const cardiologistInputs = document.querySelector('.visit-inputs.cardiologist');
+
+    if(cardiologistInputs.children.length < 4) {
+        createEl(['text', 'visit-pressure'], Input, 'afterend', document.querySelector('label[for="visit-pressure"]'));
+        createEl(['text', 'visit-weight'], Input, 'afterend', document.querySelector('label[for="visit-weight"]'));
+        createEl(['text', 'visit-diseases'], Input, 'afterend', document.querySelector('label[for="visit-diseases"]'));
+        createCardioDentistInput(); 
+    }
+}
+
+//case: dentist
+function dentistInputs(visitInputsCollection){
+    visitInputsCollection.forEach(el => el.classList.contains('dentist') ? el.style.display = 'flex' : el.style.display = 'none');
+            const cardiologistDentist = document.querySelector('.visit-inputs.dentist');
+
+            if(cardiologistDentist.children.length < 2) createEl(['date', 'visit-date'], Input, 'afterend', document.querySelector('label[for="visit-date"]'));
+}
+
+//case: therapist
+function therapistInputs(visitInputsCollection){
+    visitInputsCollection.forEach(el => {
+        if(el.classList.contains('cardiologist') && el.classList.contains('therapist')){
+             el.style.display = 'block';
+             createCardioDentistInput();
+        } else {
+            el.style.display = 'none'
+        }
+    } );
 }
 
 
