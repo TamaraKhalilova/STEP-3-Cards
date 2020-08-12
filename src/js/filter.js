@@ -65,13 +65,13 @@ searchBtn.addEventListener('click', async function (event){
 
 });
 
-// async function delete2(cardId){
-//   await axios({
-//     method: 'DELETE',
-//     url: `http://cards.danit.com.ua/cards/${cardId}`,
-//     headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-// })
-//     .then(response => {
-//         console.log(response.data)
-//     })
-// }
+async function delete2(cardId){
+  await axios({
+    method: 'DELETE',
+    url: `http://cards.danit.com.ua/cards/${cardId}`,
+    headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+})
+    .then(response => {
+        console.log(response.data)
+    })
+}

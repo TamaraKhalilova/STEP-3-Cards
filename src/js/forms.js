@@ -158,6 +158,7 @@ btnHeader.addEventListener('click', ()=>{
         }
 
         createVisitCreationForm();
+        if(localStorage.getItem('action') !== 'creation') document.querySelector('.btn--create').style.display = 'none';
         createDoctorsSlct();
     }
 })
@@ -295,7 +296,6 @@ function visitInputsGeneralCreation(visitInputsGeneral){
         createEl(['text', 'visit-details'], Input, 'afterend', document.querySelector('label[for="visit-details"]')); 
     }
 }
-
 
 // кнопка Х
 modal.addEventListener('click', (e)=>{

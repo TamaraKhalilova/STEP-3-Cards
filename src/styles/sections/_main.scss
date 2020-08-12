@@ -1,6 +1,6 @@
 /* ВРЕМЕННО */
 .main {
-    height: calc(100vh - 110px - 82px);
+    min-height: calc(100vh - 110px - 82px - 16px);
 }
 
 .visit-board {
