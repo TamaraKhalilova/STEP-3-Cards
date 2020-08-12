@@ -295,7 +295,7 @@ async function requestDeleteCard(cardId, card) {
     .catch(error => console.log(error));
 }
 
-// tamara: редактирование карточку
+// tamara: редактирование карточки
 const visitBoard = document.querySelector('.visit-board');
 visitBoard.addEventListener('click', (event) => {
     if (!event.target.classList.contains('btn-change')) return;

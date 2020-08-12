@@ -158,6 +158,7 @@ btnHeader.addEventListener('click', ()=>{
         }
 
         createVisitCreationForm();
+        if(localStorage.getItem('action') !== 'creation') document.querySelector('.btn--create').style.display = 'none';
         createDoctorsSlct();
     }
 })
