@@ -296,7 +296,6 @@ function visitInputsGeneralCreation(visitInputsGeneral){
     }
 }
 
-
 // кнопка Х
 modal.addEventListener('click', (e)=>{
     if (!e.target.classList.contains('btn--close')) return;

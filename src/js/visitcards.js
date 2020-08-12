@@ -295,7 +295,7 @@ async function requestDeleteCard(cardId, card) {
     .catch(error => console.log(error));
 }
 
-// tamara: editCard() - редактировать карточку
+// tamara: редактирование карточку
 const visitBoard = document.querySelector('.visit-board');
 visitBoard.addEventListener('click', (event) => {
     if (!event.target.classList.contains('btn-change')) return;
@@ -311,8 +311,6 @@ visitBoard.addEventListener('click', (event) => {
     visitCreationForm = document.querySelector('.visit-creation');
     visitCreationForm.style.display = 'flex';
     pageWrapper.style.filter = 'blur(5px)';
-
-
 
     const visitInputsGeneral = document.querySelector('.visit-inputs--general');
     const visitInputsCollection = document.querySelectorAll('.visit-inputs');
@@ -338,9 +336,6 @@ visitBoard.addEventListener('click', (event) => {
     const save = document.querySelector('.btn--save');
 
     (!save) ? createSaveBtn(visitCreationForm, cardId) : save.style.display = 'block';
-
-
-        
 });
 
 // Миронец добавил dataset
@@ -362,7 +357,6 @@ function createSaveBtn(visitCreationForm, cardId){
 
 
 
-
 async function setCardOnForm(cardId) {
     await axios.get(`http://cards.danit.com.ua/cards/${cardId}`,
     {headers: { "Authorization" : `Bearer ${localStorage.getItem('token')}` } 
@@ -373,7 +367,7 @@ async function setCardOnForm(cardId) {
             document.querySelector('#visit-desc').value = response.data.description;
             document.querySelector('[name="visit-urgency"]').value = response.data.urgency;
             document.querySelector('#visit-details').value = response.data.fio;
-                switch (response.doctor){
+                switch (response.data.doctor){
                     case 'cardiologist':
                         document.querySelector('#visit-pressure').value = response.data.normalpreasure;
                         document.querySelector('#visit-weight').value = response.data.massindex;
