@@ -270,7 +270,7 @@ function showHideVisit(arrayVisits) {
 function deleteCard(arrayVisits) {
     arrayVisits.forEach((elem) => {
         elem.addEventListener('click', (event) => {
-            let card = event.currentTarget.parentElement.parentElement.parentElement;
+            let card = event.currentTarget.closest('.visit-card');
             let cardId = card.dataset.id;
             requestDeleteCard(cardId, card);
 
@@ -301,6 +301,7 @@ visitBoard.addEventListener('click', (event) => {
     if (!event.target.classList.contains('btn-change')) return;
 
     localStorage.setItem('action', 'editing');
+
     modal.style.display = 'block';
 
     if (!visitCreationForm) {
@@ -330,12 +331,18 @@ visitBoard.addEventListener('click', (event) => {
             break;
     }
 
-    let cardId = event.target.parentElement.parentElement.parentElement.dataset.id
+    let cardId = event.target.closest('.visit-card').dataset.id;
     setCardOnForm(cardId) // Миронец
 
     const save = document.querySelector('.btn--save');
+    const btnCreate = document.querySelector('.btn--create');
 
-    (!save) ? createSaveBtn(visitCreationForm, cardId) : save.style.display = 'block';
+    if (!save) { 
+        createSaveBtn(visitCreationForm, cardId) 
+     } else {
+         save.style.display = 'block';
+         if (btnCreate) document.querySelector('.btn--create').style.display = 'none';
+     } 
 });
 
 // Миронец добавил dataset
