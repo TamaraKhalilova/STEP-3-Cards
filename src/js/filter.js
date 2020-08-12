@@ -1,3 +1,5 @@
+//  необходимые импорты из visitcards.js deleteVisits() addCardVisit()
+
 function filterCardVisit(cardsArray, doctor, urgency) {
   let selectedCardsArray = [];
 
@@ -23,7 +25,8 @@ function filterCardVisit(cardsArray, doctor, urgency) {
     }
   });
 
-  console.log(selectedCardsArray);
+  deleteVisits();
+  selectedCardsArray.forEach(visit => addCardVisit(visit))
 }
 
 const inputSearch = document.querySelector('.filter__search');
@@ -43,7 +46,27 @@ selectUrgency.addEventListener('change', (event) => {
   return urgency;
 });
 
-searchBtn.addEventListener('click', (event) => {
+searchBtn.addEventListener('click', async function (event){
   event.preventDefault();
-  filterCardVisit(cardsArray, doctor, urgency);
+  
+  await axios.get('https://cards.danit.com.ua/cards',    
+  {headers: { "Authorization" : `Bearer ${localStorage.getItem('token')}` } 
+  })
+  
+  .then(response => {
+    console.log(response.data)
+    filterCardVisit(response.data, doctor, urgency)
+  });
+
 });
+
+// async function delete2(cardId){
+//   await axios({
+//     method: 'DELETE',
+//     url: `http://cards.danit.com.ua/cards/${cardId}`,
+//     headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+// })
+//     .then(response => {
+//         console.log(response.data)
+//     })
+// }
