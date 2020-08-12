@@ -24,9 +24,10 @@ function filterCardVisit(cardsArray, doctor, urgency) {
       return false;
     }
   });
-
+  console.log(selectedCardsArray);
   deleteVisits();
   selectedCardsArray.forEach(visit => addCardVisit(visit))
+
 }
 
 const inputSearch = document.querySelector('.filter__search');
@@ -54,8 +55,12 @@ searchBtn.addEventListener('click', async function (event){
   })
   
   .then(response => {
-    console.log(response.data)
-    filterCardVisit(response.data, doctor, urgency)
+    console.log(response.data, doctor, urgency)
+    
+    filterCardVisit(response.data, doctor, urgency);
+    addMessage(document.querySelectorAll('.visit-card').length, document.querySelector('.visit-board'));
+    showHideVisit(document.querySelectorAll('.open-visit'));
+    deleteCard(document.querySelectorAll('.btn-delete'))
   });
 
 });
