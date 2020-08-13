@@ -4,7 +4,7 @@ function filterCardVisit(cardsArray, doctor, urgency) {
   let selectedCardsArray = [];
 
   for (let obj of cardsArray) {
-    if (obj.fio.toLowerCase().indexOf(inputSearch.value) !== -1 || obj.title.toLowerCase().indexOf(inputSearch.value) !== -1 || obj.description.toLowerCase().indexOf(inputSearch.value) !== -1) {
+    if (obj.fio.toLowerCase().includes(inputSearch.value) || obj.title.toLowerCase().includes(inputSearch.value) || obj.description.toLowerCase().includes(inputSearch.value)) {
       selectedCardsArray.push(obj);
     }
   }
@@ -26,16 +26,17 @@ function filterCardVisit(cardsArray, doctor, urgency) {
   });
   console.log(selectedCardsArray);
   deleteVisits();
-  selectedCardsArray.forEach(visit => addCardVisit(visit))
-
+  selectedCardsArray.forEach(visit => addCardVisit(visit));
 }
 
 const inputSearch = document.querySelector('.filter__search');
 const selectDoctor = document.querySelector('#status-doctor');
 const selectUrgency = document.querySelector('#status-priority');
 const searchBtn = document.querySelector('.filter__search-btn');
-let doctor;
-let urgency;
+let doctor = 'all';
+let urgency = 'all';
+let searching;
+
 
 selectDoctor.addEventListener('change', (event) => {
   doctor = event.target.value;
@@ -47,31 +48,34 @@ selectUrgency.addEventListener('change', (event) => {
   return urgency;
 });
 
-searchBtn.addEventListener('click', async function (event){
+searchBtn.addEventListener('click', async function (event) {
   event.preventDefault();
-  
-  await axios.get('https://cards.danit.com.ua/cards',    
-  {headers: { "Authorization" : `Bearer ${localStorage.getItem('token')}` } 
-  })
-  
-  .then(response => {
-    console.log(response.data, doctor, urgency)
-    
-    filterCardVisit(response.data, doctor, urgency);
-    addMessage(document.querySelectorAll('.visit-card').length, document.querySelector('.visit-board'));
-    showHideVisit(document.querySelectorAll('.open-visit'));
-    deleteCard(document.querySelectorAll('.btn-delete'))
-  });
+
+  await axios.get('https://cards.danit.com.ua/cards', {
+      headers: {
+        "Authorization": `Bearer ${localStorage.getItem('token')}`
+      }
+    })
+
+    .then(response => {
+      console.log(response.data)
+      filterCardVisit(response.data, doctor, urgency);
+      addMessage(document.querySelectorAll('.visit-card').length, document.querySelector('.visit-board'));
+      showHideVisit(document.querySelectorAll('.open-visit'));
+      deleteCard(document.querySelectorAll('.btn-delete'));
+    });
 
 });
 
-async function delete2(cardId){
+async function delete2(cardId) {
   await axios({
-    method: 'DELETE',
-    url: `http://cards.danit.com.ua/cards/${cardId}`,
-    headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-})
-    .then(response => {
-        console.log(response.data)
+      method: 'DELETE',
+      url: `http://cards.danit.com.ua/cards/${cardId}`,
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
     })
+    .then(response => {
+      console.log(response.data)
+    });
 }
