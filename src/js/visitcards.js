@@ -163,16 +163,16 @@ function getCardFromForm() {
     newCard.urgency = document.querySelector('[name="visit-urgency"]').value;
     newCard.fio = document.querySelector('#visit-details').value;
     switch (newCard.doctor) {
-        case 'cardiologist':
+        case 'кардиолог':
             newCard.normalpreasure = document.querySelector('#visit-pressure').value;
             newCard.massindex = document.querySelector('#visit-weight').value;
             newCard.diseases = document.querySelector('#visit-diseases').value;
             newCard.age = document.querySelector('#visit-age').value;
             break;
-        case 'dentist':
+        case 'стоматолог':
             newCard.data = document.querySelector('#visit-date').value;
             break;
-        case 'therapist':
+        case 'терапевт':
             newCard.age = document.querySelector('#visit-age').value;
             break;
     };
@@ -205,16 +205,16 @@ function addCardVisit (visit, position = 'beforeend'){
     const visitBoard = document.querySelector('.visit-board');
     let newVisit
     switch (visit.doctor) {
-        case 'dentist':
+        case 'стоматолог':
             newVisit = new VisitDentist(visit);
 
             visitBoard.insertAdjacentHTML(position, newVisit.render());
         break;
-        case 'cardiologist':
+        case 'кардиолог':
             newVisit = new VisitCardiologist(visit);
             visitBoard.insertAdjacentHTML(position, newVisit.render());
         break;
-        case 'therapist':
+        case 'терапевт':
             newVisit = new VisitTherapists(visit);
             visitBoard.insertAdjacentHTML(position, newVisit.render());
         break;      
@@ -320,13 +320,13 @@ visitBoard.addEventListener('click', (event) => {
     visitInputsGeneralCreation(visitInputsGeneral);
     
     switch (event.target.closest('.visit-card').children[1].textContent.split(' ')[1]) {
-        case 'cardiologist':
+        case 'кардиолог':
             cardiologistInputs(visitInputsCollection);
             break;
-        case 'dentist':
+        case 'стоматолог':
             dentistInputs(visitInputsCollection);
             break;
-        case 'therapist':
+        case 'терапевт':
             therapistInputs(visitInputsCollection);
             break;
     }
@@ -375,16 +375,16 @@ async function setCardOnForm(cardId) {
             document.querySelector('[name="visit-urgency"]').value = response.data.urgency;
             document.querySelector('#visit-details').value = response.data.fio;
                 switch (response.data.doctor){
-                    case 'cardiologist':
+                    case 'кардиолог':
                         document.querySelector('#visit-pressure').value = response.data.normalpreasure;
                         document.querySelector('#visit-weight').value = response.data.massindex;
                         document.querySelector('#visit-diseases').value = response.data.diseases;
                         document.querySelector('#visit-age').value = response.data.age;
                     break;
-                    case 'dentist':
+                    case 'стоматолог':
                         document.querySelector('#visit-date').value = response.data.data;
                     break;
-                    case 'therapist':
+                    case 'терапевт':
                         document.querySelector('#visit-age').value = response.data.age;
                     break;
                 };
@@ -406,7 +406,7 @@ modal.addEventListener('click', (ev)=>{
 });
 
 
-// changeCard() - изменить карточку - нужно модальное окно
+// changeCard() - изменить карточку - 
 //  функция зарос:
 
 async function requestChangeCard(cardId, body,) {

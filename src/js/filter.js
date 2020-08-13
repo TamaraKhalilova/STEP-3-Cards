@@ -24,7 +24,7 @@ function filterCardVisit(cardsArray, doctor, urgency) {
       return false;
     }
   });
-
+  console.log(selectedCardsArray);
   deleteVisits();
   selectedCardsArray.forEach(visit => addCardVisit(visit));
 }
