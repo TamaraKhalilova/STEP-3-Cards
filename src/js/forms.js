@@ -178,9 +178,9 @@ btnHeader.addEventListener('click', () => {
 function createDoctorsSlct() {
     visitCreationForm = document.querySelector('.visit-creation');
     options = `<option value="placeholder" value =1>Выберите врача..</option> 
-        <option value="cardiologist">Кардиолог</option> 
-        <option value="dentist">Стоматолог</option>
-        <option value="therapist">Терапевт</option>`
+        <option value="кардиолог">Кардиолог</option> 
+        <option value="стоматолог">Стоматолог</option>
+        <option value="терапевт">Терапевт</option>`
 
     createEl(["doctors-selection", options], Select, 'afterbegin', visitCreationForm);
 
@@ -246,13 +246,13 @@ function visitCreate(e) {
         case 'placeholder':
             Array.from(visitCreationForm.children).forEach(el => (el.tagName !== 'SELECT') ? el.style.display = 'none' : null);
             break;
-        case 'cardiologist':
+        case 'кардиолог':
             cardiologistInputs(visitInputsCollection);
             break;
-        case 'dentist':
+        case 'стоматолог':
             dentistInputs(visitInputsCollection);
             break;
-        case 'therapist':
+        case 'терапевт':
             therapistInputs(visitInputsCollection);
             break;
     }
@@ -305,9 +305,9 @@ function visitInputsGeneralCreation(visitInputsGeneral) {
         createEl(['visit-desc', '30'], Textarea, 'afterend', document.querySelector('label[for="visit-desc"]'));
 
         options = `<option value="placeholder" selected>Срочность</option> 
-            <option value="normal">обычная</option> 
-            <option value="priority">приоритетная</option> 
-            <option value="urgent">неотложная</option>`
+            <option value="обычная">обычная</option> 
+            <option value="приоритетная">приоритетная</option> 
+            <option value="неотложная">неотложная</option>`
 
         createEl(["visit-urgency", options], Select, 'afterend', document.querySelector('textarea[id="visit-desc"]'));
         createEl(['text', 'visit-details'], Input, 'afterend', document.querySelector('label[for="visit-details"]'));
