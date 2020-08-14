@@ -126,7 +126,7 @@
         outline: none;
         appearance: none;
         cursor: pointer;
-        min-width: 200px;
+        max-width: 200px;
         text-align: right;
     }
 
@@ -141,8 +141,12 @@
         outline: none;
         appearance: none;
         cursor: pointer;
-        min-width: 200px;
+        max-width: 200px;
         text-align: center;
         text-transform: uppercase;
+
+        &:hover{
+            background-color: #e4e4e6;
+         }
     }
 }

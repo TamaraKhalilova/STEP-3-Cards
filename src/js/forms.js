@@ -166,6 +166,12 @@ btnHeader.addEventListener('click', () => {
                 el.removeAttribute('selected');
                 if (el.getAttribute('value') === 'placeholder') el.setAttribute('selected', true);
             });
+
+            visitCreationForm.querySelectorAll('input').forEach(el=>el.value='');
+            visitCreationForm.querySelectorAll('textarea').forEach(el=>el.value='');
+            visitCreationForm.querySelectorAll('div').forEach(el=>el.style.display='none');
+            visitCreationForm.querySelector('.btn--create').style.display='none';
+
             return;
         }
 
