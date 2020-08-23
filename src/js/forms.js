@@ -75,9 +75,9 @@ class Input {
 
     composeTag() {
         if (this.placeholder) {
-            return `<input type='${this.type}' id='${this.id}' placeholder='${this.placeholder}' required'>`
+            return `<input type='${this.type}' id='${this.id}' placeholder='${this.placeholder}' required>`
         } else {
-            return `<input type='${this.type}' id='${this.id}' required'>`
+            return `<input type='${this.type}' id='${this.id}' required>`
         }
 
     }
@@ -94,7 +94,7 @@ class Select {
     }
 
     composeTag() {
-        return `<select name="${this.name}">
+        return `<select required name="${this.name}">
                     ${this.options}
                 </select>`
     }
@@ -111,7 +111,7 @@ class Textarea {
     }
 
     composeTag() {
-        return `<textarea id="${this.id}" cols="${this.cols}"></textarea>`
+        return `<textarea id="${this.id}" cols="${this.cols}" required></textarea>`
     }
 
     render() {
@@ -137,11 +137,12 @@ const autorizationForm = document.querySelector('.autorization');
 createEl(['email', 'email', "Type your email..."], Input, 'afterend', document.querySelector('label[for="email"]'));
 createEl(['password', 'password', "Type your password..."], Input, 'afterend', document.querySelector('label[for="password"]'));
 
-if (localStorage.getItem('token')) {
-    btnHeader.textContent = 'Создать визит'
-    loadCards(); // (Миронец) - грузим карточки
-};
-
+document.addEventListener('DOMContentLoaded', () => {
+    if (localStorage.getItem('token')) {
+        btnHeader.textContent = 'Создать визит'
+        loadCards(); // (Миронец) - грузим карточки
+    };
+});
 
 //cобытия по нажатию кнопки в хедере
 btnHeader.addEventListener('click', () => {
@@ -245,8 +246,6 @@ function visitCreate(e) {
             pageWrapper.style.filter = '';
             localStorage.removeItem('action');
         })
-
-        // ---------------------------------
     }
     switch (e.target.value) {
         case 'placeholder':
